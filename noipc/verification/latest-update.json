@@ -50,9 +50,17 @@
     "install_guard": 7,
     "source_versions": 5,
     "atomic_publish": 2,
-    "dist_upgrade_resolver": 10
+    "dist_upgrade_resolver": 10,
+    "public_source": 2
   },
   "timer_enabled": true,
   "source_parent_commit": "d2f20297894cf9aebc9213ebb863c5fbe53805c3",
-  "official_upstream_commit": "724edf9bde9d356724ad384a2e196edc3c9f80f7"
+  "official_upstream_commit": "724edf9bde9d356724ad384a2e196edc3c9f80f7",
+  "scheduled_service_check": {
+    "started": "2026-10-29T13:10:53.858262+00:00",
+    "status": "up-to-date",
+    "official_version": "18.6-3",
+    "upstream_release": "REL_18_6",
+    "update_available": false
+  }
 }

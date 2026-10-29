@@ -1,41 +1,53 @@
 Get:1 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable InRelease [2679 B]
-Get:2 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main Sources [1768 B]
-Hit:3 https://http.kali.org/kali kali-rolling InRelease
-Get:4 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages [6236 B]
-Fetched 10.7 kB in 2s (5851 B/s)
+Get:2 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages [6256 B]
+Get:3 https://kali.download/kali kali-rolling InRelease [34.0 kB]
+Get:4 https://kali.download/kali kali-rolling/main arm64 Packages [21.7 MB]
+Fetched 21.7 MB in 2s (12.1 MB/s)
 Reading package lists...
-postgresql:
-  Installed: 18+293
-  Candidate: 18+293
+
+postgresql-18:
+  Installed: (none)
+  Candidate: 18.6-3+noipc2
   Version table:
- *** 18+293 1001
+     18.6-3+noipc2 1001
+        500 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages
+     18.6-3 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+
+postgresql:
+  Installed: (none)
+  Candidate: 18+293+noipc2
+  Version table:
+     18+293+noipc2 1001
         500 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages
      18+293 -1
         500 https://http.kali.org/kali kali-rolling/main arm64 Packages
-postgresql-18:
-  Installed: 18.6-3
-  Candidate: 18.6-3
-  Version table:
- *** 18.6-3 1001
-        500 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages
-     18.6-3 -1
-        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+
 libpq5:
-  Installed: 18.6-3
-  Candidate: 18.6-3
+  Installed: (none)
+  Candidate: 18.6-3+noipc2
   Version table:
- *** 18.6-3 1001
+     18.6-3+noipc2 1001
         500 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages
      18.6-3 -1
         500 https://http.kali.org/kali kali-rolling/main arm64 Packages
-'https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt/pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-18_18.6-3_arm64.deb' postgresql-18_18.6-3_arm64.deb 6833292 SHA512:7ac12b0e86078e94af24968f9e6a6e77422829366d9b2aa2be2345469de5fb2b6739a97a7b670e718d429035d4238fd1027959e3401c923c3cdd020f57b35f10
-PASS: signed public source selects the exact official version from NoIPC
-Get:1 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 postgresql-18 arm64 18.6-3 [6833 kB]
-Get:2 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 postgresql-client all 18+293 [1848 B]
-Get:3 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 postgresql all 18+293 [1836 B]
-Fetched 6837 kB in 3s (1994 kB/s)
-11dc9d530f15c95f97a1ed6f11c4dce8cb221f35577270774627feb88070bd7d  postgresql-18_18.6-3_arm64.deb
-a354c948821035b39dbedee4465a7d61c42a6f92118f3a5666f3144facb0588b  postgresql_18+293_all.deb
-060041ded0fdd38fdf9aaf749a4432fe4c02f37d30f5fabc7a8ad71e8e85ffad  postgresql-client_18+293_all.deb
-76034c656f7b66b8ef9c662d97baba13f966dcf05d47965a88b672a895469056  bootstrap.deb
-PASS: current official-version server, metapackages and guarded bootstrap download publicly
+
+'https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt/pool/main/p/postgresql-18/26afa6e91728afd57e39/postgresql-18_18.6-3%2bnoipc2_arm64.deb' postgresql-18_18.6-3+noipc2_arm64.deb 6833336 SHA512:f40fd10d9415d5a384b895cfd4bf000c2bcdf1a266e0d9e98070bc0867dd4f53820c4539fd0446d2398f84e98200d0772ec93a5aa928b0566a2176b8eeb8bdda
+
+PASS: public signed APT selects the NoIPC revision and blocks stock core fallback
+Get:1 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 postgresql-18 arm64 18.6-3+noipc2 [6833 kB]
+Get:2 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 postgresql-client all 18+293+noipc2 [1856 B]
+Get:3 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 postgresql all 18+293+noipc2 [1852 B]
+Fetched 6837 kB in 3s (2135 kB/s)
+
+19f2cce1944cfb80ebfc88565055bf0e92f3f0da87f67de5c2d7024d0f524c8f  postgresql_18+293+noipc2_all.deb
+2d77f95e4a43c13c7ab35deca649b177017f92555b1b0ab8d8d6beac3cc0a48c  postgresql-client_18+293+noipc2_all.deb
+ac420e77f8ecd50fd19d8530d57957b6869cad24a6d632a5d8af33fcc281c88c  postgresql-18_18.6-3+noipc2_arm64.deb
+  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+                                 Dload  Upload  Total   Spent   Left   Speed
+
+  0      0   0      0   0      0      0      0                              0
+100   5552 100   5552   0      0  15841      0                              0
+100   5552 100   5552   0      0  15836      0                              0
+100   5552 100   5552   0      0  15831      0                              0
+PASS: public server, metapackages and bootstrap downloads match the tested package hashes
