@@ -48,5 +48,7 @@
     "legacy_migration": 2
   },
   "source_parent_commit": "0b7f2d8a4e5294b371bb9d020a5e5ece166426a8",
-  "official_upstream_commit": "724edf9bde9d356724ad384a2e196edc3c9f80f7"
+  "official_upstream_commit": "724edf9bde9d356724ad384a2e196edc3c9f80f7",
+  "public_source_checks": 2,
+  "timer_enabled": true
 }

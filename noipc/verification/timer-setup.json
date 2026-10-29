@@ -1,0 +1,18 @@
+{
+  "initial_setup_verified_at": "2026-10-29T10:19:04.325596+00:00",
+  "unit": "postgresql-noipc-update.timer",
+  "enabled": true,
+  "observed_timer_state": {
+    "ActiveState": "active",
+    "SubState": "waiting",
+    "NextElapseUSecRealtime": "Fri 2026-10-30 03:42:34 GMT",
+    "Persistent": "yes"
+  },
+  "first_service_run": {
+    "started": "2026-10-29T10:17:39.920098+00:00",
+    "status": "up-to-date",
+    "official_version": "18.6-3",
+    "upstream_release": "REL_18_6",
+    "update_available": false
+  }
+}
