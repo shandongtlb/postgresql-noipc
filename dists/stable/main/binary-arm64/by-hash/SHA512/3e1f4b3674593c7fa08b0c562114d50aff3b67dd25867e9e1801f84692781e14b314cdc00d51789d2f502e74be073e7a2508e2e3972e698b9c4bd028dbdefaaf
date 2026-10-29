@@ -1,0 +1,466 @@
+Package: libecpg-compat3
+Architecture: arm64
+Version: 18.6-3+noipc2
+Multi-Arch: same
+Priority: optional
+Section: libs
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 105
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), libc6 (>= 2.17), libecpg6 (>= 9.0~), libpgtypes3
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/libecpg-compat3_18.6-3+noipc2_arm64.deb
+Size: 23748
+MD5sum: 5c88ea876ab7c4e126c87950d3523e29
+SHA1: 373d45f007d282f90ed06b3583eecb2e5f0d1ad5
+SHA256: 5382b5a876f366c94f67d37c6f7f406d5873a22b731233f877a5232bdb0542cc
+SHA512: 10b5ba8841e0840406f471ece847d849525087158a0aa2a72c3cb37096f1ca978bfe4eb04088122f1c5210563eb04ef536e0e2dd4548823a3129d301734b9e0b
+Homepage: http://www.postgresql.org/
+Description: older version of run-time library for ECPG programs
+ The libecpg_compat shared library is used by programs built with ecpg.
+ (Embedded PostgreSQL for C).
+ .
+ PostgreSQL is an object-relational SQL database management system.
+Postgresql-Noipc: yes
+
+Package: libecpg-dev
+Architecture: arm64
+Version: 18.6-3+noipc2
+Priority: optional
+Section: libdevel
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 1574
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), libecpg-compat3 (= 18.6-3+noipc2), libecpg6 (= 18.6-3+noipc2), libpgtypes3 (= 18.6-3+noipc2), libpq-dev, libc6 (>= 2.38)
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/libecpg-dev_18.6-3+noipc2_arm64.deb
+Size: 260380
+MD5sum: d8813003d4bc58851e9b356fe95bc787
+SHA1: 23dd7f7265ebdca2ee012a9391a4547c453fb6ca
+SHA256: e6ad529f12f02e875ec36eaa517ca99f2063405a1a52cbe9fd89de4d4169a96b
+SHA512: 32ced186fcad2c00346f048ec838d2c8cb9835856b1be1a926a10b474784229908757dc4119a0c172c0812d7b4844c5a894b897e647b5f49ef652b4bd269f00a
+Homepage: http://www.postgresql.org/
+Description: development files for ECPG (Embedded PostgreSQL for C)
+ This package contains the necessary files to build ECPG (Embedded
+ PostgreSQL for C) programs.  It includes the development libraries
+ and the preprocessor program ecpg.
+ .
+ PostgreSQL is an object-relational SQL database management system.
+ .
+ Install this package if you want to write C programs with SQL statements
+ embedded in them (rather than run by an external process).
+Postgresql-Noipc: yes
+
+Package: libecpg6
+Architecture: arm64
+Version: 18.6-3+noipc2
+Multi-Arch: same
+Priority: optional
+Section: libs
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 284
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), libc6 (>= 2.38), libpgtypes3, libpq5 (>= 9.0~)
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/libecpg6_18.6-3+noipc2_arm64.deb
+Size: 66468
+MD5sum: ab3b4047be5ac3e37fb6a56ae442fb2b
+SHA1: dab2b37f183977e232d1e587d8a9db92f27d5ea7
+SHA256: 13f0b4c56af3c61266c553507fe75c814bf72d17585ae5d502ccf48a955e809e
+SHA512: 2887725a00558b8f9defca6bffadae7d779a567a497a2161281fcff549962d1b0cfc2d7449b7bf63aafcb50c070edf58ef4f0701faec9ebb70a5813e8c63c4d7
+Homepage: http://www.postgresql.org/
+Description: run-time library for ECPG programs
+ The libecpg shared library is used by programs built with ECPG
+ (Embedded PostgreSQL for C).
+ .
+ PostgreSQL is an object-relational SQL database management system.
+Postgresql-Noipc: yes
+
+Package: libpgtypes3
+Architecture: arm64
+Version: 18.6-3+noipc2
+Multi-Arch: same
+Priority: optional
+Section: libs
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 170
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), libc6 (>= 2.38)
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/libpgtypes3_18.6-3+noipc2_arm64.deb
+Size: 49344
+MD5sum: cbc29843943c6aa5e93c6113e953ea10
+SHA1: 4bc8989d651aa80866f08c46e1b3c7650d9367af
+SHA256: db007cb8af6e684a05ef76998ee84ee76403d31d3b1a723d29f3e3c6e290f1d9
+SHA512: ef3aa27162e7b880b61ba1077f56c926d76dfc8801d4af2b111da05af8c226f1d5b1b72769ba6624a225553907de0850dde991db8c20524cc957faa771268c36
+Homepage: http://www.postgresql.org/
+Description: shared library libpgtypes for PostgreSQL 18
+ The libpgtypes shared library is used by programs built with ecpg.
+ (Embedded PostgreSQL for C).
+ .
+ PostgreSQL is an object-relational SQL database management system.
+Postgresql-Noipc: yes
+
+Package: libpq-dev
+Architecture: arm64
+Version: 18.6-3+noipc2
+Priority: optional
+Section: libdevel
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 694
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), libpq5 (= 18.6-3+noipc2), libssl-dev
+Suggests: postgresql-doc-18
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/libpq-dev_18.6-3+noipc2_arm64.deb
+Size: 170292
+MD5sum: a87432d3a236fe61e383fe25f2912e27
+SHA1: 8c909b6baa249c69a28d1a3a3d31814ec4f49d20
+SHA256: 644007795904d3b95890290193844e0fe0ed232cd3044de738dae3b92248a4ef
+SHA512: 8c02624f247ef5e7e92ea6bd6303591a5ba6269d2c53c28c3e007031aed9becc98c8d7fc61ff406e76c3d9077c778982e27c68a2ded898e704c48e3b313c31e2
+Homepage: http://www.postgresql.org/
+Description: header files for libpq5 (PostgreSQL library)
+ Header files and static library for compiling C programs to link
+ with the libpq library in order to communicate with a PostgreSQL
+ database backend.
+ .
+ PostgreSQL is an object-relational SQL database management system.
+Postgresql-Noipc: yes
+
+Package: libpq-oauth
+Architecture: arm64
+Version: 18.6-3+noipc2
+Multi-Arch: same
+Priority: optional
+Section: libs
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 168
+Provides: libpq-oauth-18
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), libpq5 (= 18.6-3+noipc2), libc6 (>= 2.38), libcurl4t64 (>= 7.16.3)
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/libpq-oauth_18.6-3+noipc2_arm64.deb
+Size: 45836
+MD5sum: 71d6175dfb9ed30c805377b54cb51507
+SHA1: b486836e95e9d481210c52a2d355f09d59cbe7cd
+SHA256: c4785d9df38b04249d7e1085f12d5036c25385f04a39bf727f16ac661248fcdb
+SHA512: b32bbd4ecdd6c8580eaef4b482541136035a3169529937532b533ef9329bb0ac86e9ac95862e9c3a85cc0577f3f246b3731a44481e3002794a6b15f4154597c9
+Homepage: http://www.postgresql.org/
+Description: PostgreSQL C client library - OAuth flow
+ libpq-oauth is an optional module for libpq5 implementing the Device
+ Authorization flow for OAuth clients (RFC 8628). It is maintained as
+ its own shared library in order to isolate its dependency on libcurl.
+ (End users who don't want the Curl dependency can simply choose not
+ to install this module.)
+ .
+ If a connection string allows the use of OAuth, and the server asks
+ for it, and a libpq client has not installed its own custom OAuth
+ flow, libpq will attempt to delay-load this module using dlopen() and
+ the following ABI. Failure to load results in a failed connection.
+ .
+ PostgreSQL is an object-relational SQL database management system.
+Postgresql-Noipc: yes
+
+Package: libpq5
+Architecture: arm64
+Version: 18.6-3+noipc2
+Multi-Arch: same
+Priority: optional
+Section: libs
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 1253
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), libc6 (>= 2.38), libgssapi-krb5-2 (>= 1.17), libldap2 (>= 2.6.2), libssl3t64 (>= 3.0.0)
+Recommends: ca-certificates
+Suggests: libpq-oauth
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/libpq5_18.6-3+noipc2_arm64.deb
+Size: 256152
+MD5sum: ad12c313e1ec2be1973fd745dde44edb
+SHA1: 5ed5418fbbda23c554fd2447695eee3a983020ed
+SHA256: 1e0f78cf6413b004cb64eb6111562eb4f1adb6cd9ab7c8f2fc52b4be38448efe
+SHA512: 152d34eb19d282c85ad20c2d92fe07379fe713dc6320c9297d194aa75e6c00242002c3835e85d4b8a373fed8a947aa2c7149066e10660d06531b45e6f500836b
+Homepage: http://www.postgresql.org/
+Description: PostgreSQL C client library
+ libpq is a C library that enables user programs to communicate with
+ the PostgreSQL database server.  The server can be on another machine
+ and accessed through TCP/IP.  This version of libpq is compatible
+ with servers from PostgreSQL 8.2 or later.
+ .
+ This package contains the run-time library, needed by packages using
+ libpq. SSL certificate validation (the sslrootcert=system connection
+ option) requires the ca-certificates package.
+ .
+ PostgreSQL is an object-relational SQL database management system.
+Postgresql-Noipc: yes
+
+Package: postgresql-18-jit
+Architecture: arm64
+Version: 18.6-3+noipc2
+Priority: optional
+Section: database
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 23738
+Provides: postgresql-18-jit-llvm (= 21)
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), postgresql-18 (= 18.6-3+noipc2), libc6 (>= 2.17), libgcc-s1 (>= 3.0), libllvm21 (>= 1:21.1.0), libstdc++6 (>= 5.2)
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/postgresql-18-jit_18.6-3+noipc2_arm64.deb
+Size: 9804040
+MD5sum: 0155d7489cc9c58ba0319f599e1e5aab
+SHA1: 746987ff81caf97ad49662a8ed6fd38d18563022
+SHA256: ae6522e1810eeeee3c9a9128be42b2c48339de39ce5d31198d656babe0c680bb
+SHA512: f012a4664a191ee9fc722ff98a92aa121d026486e3b4166a6d1c2ec1a8a0e96e0a685b0d1150eedf02af90419e236d5bf4d056e42d02247ed7241cacad4df6b6
+Homepage: http://www.postgresql.org/
+Description: LLVM JIT support for PostgreSQL 18
+ PostgreSQL, also known as Postgres, is a free and open-source relational
+ database management system (RDBMS) emphasizing extensibility and SQL
+ compliance. It features transactions with Atomicity, Consistency, Isolation,
+ Durability (ACID) properties, automatically updatable views, materialized
+ views, triggers, foreign keys, and stored procedures. It is designed to handle
+ a range of workloads, from single machines to data warehouses or Web services
+ with many concurrent users.
+ .
+ This package provides LLVM-based query JITing for PostgreSQL 18.
+Postgresql-Noipc: yes
+
+Package: postgresql-18
+Architecture: arm64
+Version: 18.6-3+noipc2
+Priority: optional
+Section: database
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 38832
+Provides: postgresql-contrib-18
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), locales | locales-all, postgresql-client-18 (= 18.6-3+noipc2), postgresql-common (>= 275~), ssl-cert, tzdata, debconf (>= 0.5) | debconf-2.0, libc6 (>= 2.43), libgssapi-krb5-2 (>= 1.14+dfsg), libicu78 (>= 78.1-1~), libldap2 (>= 2.6.2), liblz4-1 (>= 0.0~r130), libnuma1 (>= 2.0.11), libpam0g (>= 0.99.7.1), libpq5 (>= 17~~), libselinux1 (>= 3.1~), libssl3t64 (>= 3.4.0), libsystemd0, liburing2 (>= 2.5), libuuid1 (>= 2.16), libxml2-16 (>= 2.14.1), libxslt1.1 (>= 1.1.25), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.1.4)
+Recommends: postgresql-18-jit, sysstat
+Breaks: postgresql-18-decoderbufs (<< 3.6.0-2), postgresql-18-pg-rewrite (<< 2.2-2), postgresql-18-squeeze (<< 1.9.4-2), postgresql-18-timescaledb (<< 2.29.1+dfsg-2), postgresql-18-wal2json (<< 2.6-4)
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/postgresql-18_18.6-3+noipc2_arm64.deb
+Size: 6833336
+MD5sum: 4251e774b22673962711a4329ed244f7
+SHA1: 90d41cfed78c119006885eb0604a5a60f0246caf
+SHA256: ac420e77f8ecd50fd19d8530d57957b6869cad24a6d632a5d8af33fcc281c88c
+SHA512: f40fd10d9415d5a384b895cfd4bf000c2bcdf1a266e0d9e98070bc0867dd4f53820c4539fd0446d2398f84e98200d0772ec93a5aa928b0566a2176b8eeb8bdda
+Homepage: http://www.postgresql.org/
+Description: The World's Most Advanced Open Source Relational Database
+ PostgreSQL, also known as Postgres, is a free and open-source relational
+ database management system (RDBMS) emphasizing extensibility and SQL
+ compliance. It features transactions with Atomicity, Consistency, Isolation,
+ Durability (ACID) properties, automatically updatable views, materialized
+ views, triggers, foreign keys, and stored procedures. It is designed to handle
+ a range of workloads, from single machines to data warehouses or Web services
+ with many concurrent users.
+ .
+ This package provides the database server for PostgreSQL 18.
+Postgresql-Catversion: 202506291-1800
+Postgresql-Noipc: yes
+
+Package: postgresql-client-18
+Architecture: arm64
+Version: 18.6-3+noipc2
+Multi-Arch: foreign
+Priority: optional
+Section: database
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 11807
+Provides: postgresql-client
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), libpq5 (>= 18.6), postgresql-client-common (>= 182~), sensible-utils, libc6 (>= 2.38), liblz4-1 (>= 0.0~r127), libreadline8t64 (>= 6.0), libssl3t64 (>= 3.0.0), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.1.4)
+Suggests: postgresql-18, postgresql-doc-18
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/postgresql-client-18_18.6-3+noipc2_arm64.deb
+Size: 2089184
+MD5sum: b7d3c7105f6c8ff50af2341b8cedd7f5
+SHA1: d8c35a9b30f1100fcf8a9564201105a465d9ca68
+SHA256: 27888178928265d045e99ab96a5813aa83b4bf7e8cca72ea0f2c4a78167fbb2e
+SHA512: 90b00a599dbcff588b0ee7d84fb5bc4a7099ce1e19fcbb01a4f428eaf12f9a60f32dfbc40b806e1bcf3febd567fcad785786c427e46831ab6ab17dba67dc3f22
+Homepage: http://www.postgresql.org/
+Description: front-end programs for PostgreSQL 18
+ This package contains client and administrative programs for
+ PostgreSQL: these are the interactive terminal client psql and
+ programs for creating and removing users and databases.
+ .
+ This is the client package for PostgreSQL 18. If you install
+ PostgreSQL 18 on a standalone machine, you need the server package
+ postgresql-18, too. On a network, you can install this package on
+ many client machines, while the server package may be installed on
+ only one machine.
+ .
+ PostgreSQL is an object-relational SQL database management system.
+Postgresql-Noipc: yes
+
+Package: postgresql-plperl-18
+Architecture: arm64
+Version: 18.6-3+noipc2
+Priority: optional
+Section: database
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 549
+Provides: postgresql-plperl
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), perl, postgresql-18 (= 18.6-3+noipc2), libc6 (>= 2.34), libperl5.42 (>= 5.42.0)
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/postgresql-plperl-18_18.6-3+noipc2_arm64.deb
+Size: 73252
+MD5sum: fcce418fe4d99a46a8bb7543240596c5
+SHA1: d605890b9c3478414b16ec9f2b36a305624c9a3b
+SHA256: 4bf03762418410449111381f8fc3130d37ff264fef23b9f8aaf47af9feed0324
+SHA512: 9ab0e988f7e1fbbb51bffaa35366b4249a85964ec886473f85f9565266cec212aae7040e27cb5501b3e424313bab8d3589214362fcfa82c0805f57e7cd3f5298
+Homepage: http://www.postgresql.org/
+Description: PL/Perl procedural language for PostgreSQL 18
+ PL/Perl enables an SQL developer to write procedural language functions
+ for PostgreSQL 18 in Perl.  You need this package if you have any
+ PostgreSQL 18 functions that use the languages plperl or plperlu.
+ .
+ PostgreSQL is an object-relational SQL database management system.
+Postgresql-Noipc: yes
+
+Package: postgresql-plpython3-18
+Architecture: arm64
+Version: 18.6-3+noipc2
+Priority: optional
+Section: database
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 647
+Provides: postgresql-plpython3
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), postgresql-18 (= 18.6-3+noipc2), libc6 (>= 2.17), libpython3.14 (>= 3.14.1)
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/postgresql-plpython3-18_18.6-3+noipc2_arm64.deb
+Size: 96208
+MD5sum: d73144dffdd5df96e9ba54d1bd9cc394
+SHA1: d72ad734f455431df75f1326f964f112f6e0080c
+SHA256: 7eb9cd2e39e89a2d4c0bec112280337584a80a1f4fd818db7678178d0d82c852
+SHA512: 44fbb5b208e3889a0dea664d8d0688bff55111256552059444cea46362d4d4633fe6d688c77c34c32dfe12ed0716689ded1eda13c1374502563fdad58790e1fa
+Homepage: http://www.postgresql.org/
+Description: PL/Python 3 procedural language for PostgreSQL 18
+ PL/Python 3 enables an SQL developer to write procedural language functions
+ for PostgreSQL 18 in Python 3.  You need this package if you have any
+ PostgreSQL 18 functions that use the languages plpython3 or plpython3u.
+ .
+ PostgreSQL is an object-relational SQL database management system.
+Postgresql-Noipc: yes
+
+Package: postgresql-pltcl-18
+Architecture: arm64
+Version: 18.6-3+noipc2
+Priority: optional
+Section: database
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 213
+Provides: postgresql-pltcl
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), postgresql-18 (= 18.6-3+noipc2), libc6 (>= 2.17), libtcl8.6 (>= 8.6.0)
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/postgresql-pltcl-18_18.6-3+noipc2_arm64.deb
+Size: 48268
+MD5sum: 92fb13535e7d906f8f9d615c5b66c25a
+SHA1: ccb187c0e49075535bcfa14348c71f9659284391
+SHA256: 31be389305bc8579324fa66acb7bc2c3a18e4e56994ed62e8fb43f3e1ff3b37c
+SHA512: 0b4f7e4c4a8af4311671699ebc3ce416c601579f43699fe208c66216a5af75f4b65ee9c9c1c6b6bf563cf3736db54ec425e6cdefe550b3aaad8e8eea5a1838ce
+Homepage: http://www.postgresql.org/
+Description: PL/Tcl procedural language for PostgreSQL 18
+ PL/Tcl enables an SQL developer to write procedural language functions
+ for PostgreSQL 18 in Tcl.  You need this package if you have any
+ PostgreSQL 18 functions that use the languages pltcl or pltclu.
+ .
+ PostgreSQL is an object-relational SQL database management system.
+Postgresql-Noipc: yes
+
+Package: postgresql-server-dev-18
+Architecture: arm64
+Version: 18.6-3+noipc2
+Priority: optional
+Section: libdevel
+Source: postgresql-18
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Installed-Size: 8750
+Depends: postgresql-noipc-archive-keyring (>= 2026.10.29.122732), clang-21, libpq-dev (>= 18~~), llvm-21-dev, postgresql-client-18 (= 18.6-3+noipc2), postgresql-common (>= 142~), libc6 (>= 2.38)
+Filename: pool/main/p/postgresql-18/26afa6e91728afd57e39/postgresql-server-dev-18_18.6-3+noipc2_arm64.deb
+Size: 1396000
+MD5sum: e2269dba8da969c406ba2fadafa30b1f
+SHA1: 6c14f800d4ddaa19ba0904828842837f8249ae91
+SHA256: 8b2d89abe2c18b520da39752c333299dc9c71db0988324e08d8be0218382073d
+SHA512: 5f282988363521d5108763b633b2813348ae5d78ec4019c0de2d61d357a01abf516dbb504f9596ac134f144843c8e51100b3b99914485d07430d5e1f37b93323
+Homepage: http://www.postgresql.org/
+Description: development files for PostgreSQL 18 server-side programming
+ Header files for compiling SPI code to link into PostgreSQL's backend; for
+ example, for C functions to be called from SQL.
+ .
+ This package also contains the Makefiles necessary for building add-on
+ modules of PostgreSQL, which would otherwise have to be built in the
+ PostgreSQL source-code tree.
+ .
+ PostgreSQL is an object-relational SQL database management system.
+Postgresql-Noipc: yes
+
+Package: postgresql-client
+Architecture: all
+Version: 18+293+noipc2
+Priority: optional
+Section: database
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Depends: postgresql-client-18 (>= 18.6-3+noipc2), postgresql-noipc-archive-keyring (>= 2026.10.29.122732)
+Filename: pool/main/p/postgresql-client/2d77f95e4a43c13c7ab3/postgresql-client_18+293+noipc2_all.deb
+Size: 1856
+MD5sum: 6f781fbf029bf55af9615584da27bfc0
+SHA1: 2030f81bff8ed0a08a51de9858473648a2409037
+SHA256: 2d77f95e4a43c13c7ab35deca649b177017f92555b1b0ab8d8d6beac3cc0a48c
+SHA512: 099b0779fac26de4c234d8a3f74c57753d69f9cc4a5b463c9cfb07fed5c7eeedef957ac1077efd1822cae3da065929b502ccd5c2bbf5fe36ce294a3bc43d6dc0
+Homepage: https://github.com/shandongtlb/postgresql-noipc
+Description: front-end programs for the PostgreSQL NoIPC rebuild
+PostgreSQL-NoIPC: yes
+
+Package: postgresql-noipc-archive-keyring
+Architecture: all
+Version: 2026.10.29.122732
+Priority: optional
+Section: database
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Depends: ca-certificates, python3
+Filename: pool/main/p/postgresql-noipc-archive-keyring/ef71262e7181a2b453cd/postgresql-noipc-archive-keyring_2026.10.29.122732_all.deb
+Size: 5552
+MD5sum: 2a2e7f5ae2714e612d4016feeae62993
+SHA1: 55d03383b1415541b5db06be9394754382296ac2
+SHA256: ef71262e7181a2b453cdb3e03bffa4e8e970e2e10cde31ed954c86b7494ff194
+SHA512: 00a81ed35b75f6424f5301242590dd45ac46a100fd8589266331945caf8a236bb8b77e6fdab350d46096c0ffe3f6a89585529439fc857d15b16b44156fc1a228
+Homepage: https://github.com/shandongtlb/postgresql-noipc
+Description: signing key, guarded APT source and policy for PostgreSQL NoIPC
+PostgreSQL-NoIPC: yes
+
+Package: postgresql-noipc
+Architecture: all
+Version: 18.6-3+noipc2
+Priority: optional
+Section: database
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Depends: postgresql-18 (>= 18.6-3+noipc2), postgresql-client-18 (>= 18.6-3+noipc2), postgresql-noipc-archive-keyring (>= 2026.10.29.122732)
+Filename: pool/main/p/postgresql-noipc/3603666cb09f8d1e8b4b/postgresql-noipc_18.6-3+noipc2_all.deb
+Size: 1860
+MD5sum: 94e69d5f3ebc6c1914002cca4526f0c1
+SHA1: ee2b1f9fd335c5ada085e65cc56591a08f781dfa
+SHA256: 3603666cb09f8d1e8b4b38cb414cdca478ae989d4130616d68821c9265036a65
+SHA512: f0c58c975b07d44c74797fd584c7cb351eb851819948b532e305de60db603b2397f355530489fdcb5a5d564f2be5e2eb976df3b23113173a0179cee55c1292d3
+Homepage: https://github.com/shandongtlb/postgresql-noipc
+Description: PostgreSQL 18 rebuilt for Linux kernels without SysV IPC
+PostgreSQL-NoIPC: yes
+
+Package: postgresql
+Architecture: all
+Version: 18+293+noipc2
+Priority: optional
+Section: database
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Depends: postgresql-18 (>= 18.6-3+noipc2), postgresql-noipc-archive-keyring (>= 2026.10.29.122732)
+Filename: pool/main/p/postgresql/19f2cce1944cfb80ebfc/postgresql_18+293+noipc2_all.deb
+Size: 1852
+MD5sum: 751a8bd4f37183d07134f956cbb2d466
+SHA1: 0eba885546517d86759acf656bd48d3d6b67e05e
+SHA256: 19f2cce1944cfb80ebfc88565055bf0e92f3f0da87f67de5c2d7024d0f524c8f
+SHA512: f92864a410f4fb4b5aa89363dd8e18fda2a04c573d1121b6d81e53a2ae892576f0e41f5acca2c234f2d447b2b48fbc84930ef903010220e2c554dfd6061203bc
+Homepage: https://github.com/shandongtlb/postgresql-noipc
+Description: PostgreSQL database server with the NoIPC kernel compatibility patch
+PostgreSQL-NoIPC: yes
+

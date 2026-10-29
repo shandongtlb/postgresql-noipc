@@ -1,0 +1,30 @@
+Origin: PostgreSQL-NoIPC
+Label: PostgreSQL NoIPC
+Suite: stable
+Codename: noipc
+Date: Thu, 29 Oct 2026 13:09:40 +0000
+Architectures: arm64
+Components: main
+Acquire-By-Hash: yes
+Description: PostgreSQL 18 NoIPC rebuilds for Kali arm64
+MD5Sum:
+ 1048faf320ecefab242d1233c42448ec            23270 main/binary-arm64/Packages
+ f6d7879db6be08f96a279a240260b09b             6695 main/binary-arm64/Packages.gz
+ a18107b43aef26d4d077bacaf91e521d             6256 main/binary-arm64/Packages.xz
+ 9b5a1cf28981aab276b694ddac079e09             4819 main/source/Sources
+ c3681736fb7df9c52f8c887d6f66ead9             1785 main/source/Sources.gz
+ 505f4109fc3dd84e4a12dcdd4842833c             1776 main/source/Sources.xz
+SHA256:
+ a0f10bdd49a9b1586a430df00f2fb13aa90937df13a8cf88ef11e3f0864ef641            23270 main/binary-arm64/Packages
+ 516c032d0899a7ef075221e82f6ab1c70f3c05b2656abc4c116a4f19bd82595c             6695 main/binary-arm64/Packages.gz
+ 16e43ec08aafed526d69ac69873ee7a75567d8ad9ce2ed7bbecdd731c6694c5c             6256 main/binary-arm64/Packages.xz
+ 3f230d29a075b55ca9b3f6a90bdb6bb30a429dc2a9e2b68f2c7a877308c4b9c0             4819 main/source/Sources
+ 31424e8175e1d40b79ad4eca7986c803f547937ef5a96a59a128c74e7b76111c             1785 main/source/Sources.gz
+ c52397d7b78e875837913e3c5595a35b14a5c25c036960a80bd3b2758668b398             1776 main/source/Sources.xz
+SHA512:
+ 3e1f4b3674593c7fa08b0c562114d50aff3b67dd25867e9e1801f84692781e14b314cdc00d51789d2f502e74be073e7a2508e2e3972e698b9c4bd028dbdefaaf            23270 main/binary-arm64/Packages
+ 556b8e7da3a7c17ac3f26ff631c21ffeeb013362f1c764c459c01a0d56132027043714617a8a9cb86731b4ae96be6580c5336611dd13b741e00b48ab5d2ad43f             6695 main/binary-arm64/Packages.gz
+ 26debc91d8732c7e86dac88e1613b0594b155f8fb41cd6690e1611aad1f427b003f3f0b155ad4d35c6ac83ded13eb302a3c5a7115e1f0c869c8a254d563fedcc             6256 main/binary-arm64/Packages.xz
+ 70166a812b7388db23da6c86b46f23e295954c36da66afbba8dc50fdbffeedee9f30d3db06e69b671c218c5719a632a17bf4e2531d29068a3c4b213a59f5b7e1             4819 main/source/Sources
+ c2335ce574c64905d2395577a870483de3a6103a48724712038e912b4622a2bb5dc55bc59dddb542bf5bb6c30b6b706ef2f3fc4aa24d1a9e024222ec916f2944             1785 main/source/Sources.gz
+ deba41474c32636d038f3307903d9b9bb07591e9c678f9ddd4d8c346186ae966c6abad8ac0fa06e60ed0588fb9a348999764572a4c07e354c3d794517a952417             1776 main/source/Sources.xz
