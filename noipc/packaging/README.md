@@ -15,16 +15,36 @@ apt install -y curl ca-certificates
 curl -fLO https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt/postgresql-noipc-archive-keyring_all.deb
 apt install ./postgresql-noipc-archive-keyring_all.deb
 apt update
-apt install postgresql-noipc
+apt install postgresql postgresql-client
 systemctl enable --now postgresql
 systemctl status postgresql@18-main --no-pager
 pg_lsclusters
 runuser -u postgres -- psql
 ```
 
-`postgresql-noipc` 是指向 18 版服务端和客户端的元包；也可以直接安装 `postgresql-18`。
+日常直接使用官方名字 `postgresql`、`postgresql-client`，它们选择本源的 `postgresql-18` 和 `postgresql-client-18`。
+所有版本化核心包、库包也保留官方包名；同名包会替换原包，不会作为另一套并排安装。
+此前的 `postgresql-noipc` 仅保留为兼容别名，依赖同一份服务端和客户端。
 首次安装由官方维护脚本创建 `18/main` 集群。已有集群时沿用发行版的保留和升级规则。
-源配置包会安装公钥、Deb822 APT 源和包优先级，使后续升级继续选择 NoIPC 构建。
+源配置包 **2026.10.29.2** 安装公钥、Deb822 APT 源以及 `/etc/apt/preferences.d/postgresql-noipc`：
+
+- 本签名源的核心包及官方名字的元包优先级为 **1001**。
+- 其他源的 PostgreSQL 核心包及 `postgresql`/`postgresql-client` 元包优先级为 **-1**，默认禁止选择，覆盖未来官方大版本。
+- 按源码包匹配核心包，不会误伤 Kali 的 `postgresql-common`、`postgresql-client-common` 或 pgvector 等独立扩展。
+- NoIPC 源不可用时不回退到官方核心包。已有的其他大版本和数据不会被自动删除。
+
+该行为使用标准 [APT preferences 规则](https://manpages.debian.org/unstable/apt/apt_preferences.5.en.html)。
+屏蔽规则随源配置包更新；NoIPC 核心包的新版本仍需由维护者合并上游、构建和发布。
+
+如果此前已安装 2026.10.29.1 的源配置包，执行以下命令升级规则并使用官方安装入口：
+
+```bash
+apt update
+apt install postgresql-noipc-archive-keyring
+apt install postgresql postgresql-client
+```
+
+可用 `apt-cache policy postgresql postgresql-18 libpq5` 检查：本源为 1001，官方核心包为 -1。
 不要把此 APT 包与之前解压到 `/opt/pgsql-18-no-sysvipc` 的便携版同时作为同一集群运行。
 
 官方路径和命令：
@@ -96,12 +116,15 @@ python3 noipc/packaging/create-apt-repository.py --packages noipc/artifacts/debi
 仓库输出位于 `noipc/repository/`，通过同一 GitHub 仓库的独立 `apt` 分支发布；无需启用 GitHub Pages。
 私钥留在本机被 Git 忽略的 `noipc/keys-private/apt/`，后续更新需要继续使用并备份该目录。私钥不进入仓库或安装包。
 重新发布同一包名与版本时必须保持内容一致；有源码或依赖构建变化时应递增 `+noipc` 修订号。
+官方名字元包的版本由 `--metapackage-version` 指定（当前 `18+noipc1`）；其依赖改变时也必须递增。
 
 ## 验证
 
 `audit-debs.py` 检查真实 `.deb` 中的架构、依赖、官方集群维护脚本以及 ELF 的 SysV IPC 导入和 glibc 需求。
 `test-apt-install.sh` 只在带构建标记的隔离 Kali 环境中运行，验证签名 APT 安装、官方服务、目录、TLS、并行查询、PL 语言、JIT、多集群、配置/数据保留与源码下载。
 由宿主的 `deny-sysvipc` 启动整个测试，模拟未启用 CONFIG_SYSVIPC 的手机内核。
+`test-apt-policy.py noipc/repository` 使用真实 APT 和隔离的模拟上游索引，检查更高小版本、未来大版本、跨架构包、源不可用时的选择，以及公共服务包和独立扩展不受影响。
 `test-systemd.sh` 进一步验证随 systemd 启动、启停/重载以及真正由包维护脚本触发的服务重启。
 测试根目录须先移除仅用于构建的 `/usr/sbin/policy-rc.d`；它不进入发布包。
-实际验证记录及 QEMU/systemd 测试环境限制见 [APT 验证报告](../verification/apt-verification.md)。手机实机验证仍需要在你的 chroot 内进行。
+官方包名及屏蔽策略的新增验证见 [包名与策略验证](../verification/apt-official-names-and-policy.md)。
+原运行功能验证及 QEMU/systemd 测试环境限制见 [APT 验证报告](../verification/apt-verification.md)。手机实机验证仍需要在你的 chroot 内进行。

@@ -20,7 +20,8 @@ parser.add_argument('--packages', type=Path, required=True)
 parser.add_argument('--output', type=Path, default=base / 'repository')
 parser.add_argument('--signing-home', type=Path, default=base / 'keys-private/apt')
 parser.add_argument('--base-url', default='https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt/')
-parser.add_argument('--keyring-version', default='2026.10.29.1')
+parser.add_argument('--keyring-version', default='2026.10.29.2')
+parser.add_argument('--metapackage-version', default='18+noipc1')
 args = parser.parse_args()
 repository = args.output.resolve()
 keyhome = args.signing_home.resolve()
@@ -72,15 +73,21 @@ for source in sorted(args.packages.resolve().iterdir()):
         install_immutable(source, pool / source.name)
 
 version = manifest['noipc_version']
-pin_names = ('postgresql-18 postgresql-client-18 postgresql-18-jit '
-             'postgresql-server-dev-18 postgresql-plperl-18 postgresql-plpython3-18 '
-             'postgresql-pltcl-18 libpq5 libpq-dev libpq-oauth libecpg6 '
-             'libecpg-dev libecpg-compat3 libpgtypes3 postgresql-noipc '
-             'postgresql-noipc-archive-keyring')
+# Exact binary names give the signed rebuild precedence over the fallback deny.
+# Source matching below covers future upstream majors without blocking extensions
+# or the separate postgresql-common service-management source package.
+pin_names = ' '.join(name + ':any' for name in sorted(provided | {
+    'postgresql', 'postgresql-client', 'postgresql-noipc',
+    'postgresql-noipc-archive-keyring'}))
 source_config = (f'Types: deb deb-src\nURIs: {args.base_url.rstrip("/")}/\n'
                  'Suites: stable\nComponents: main\nArchitectures: arm64\n'
                  'Signed-By: /usr/share/keyrings/postgresql-noipc-archive-keyring.gpg\n')
-pin = (f'Package: {pin_names}\nPin: release o=PostgreSQL-NoIPC\nPin-Priority: 1001\n')
+pin = ('Explanation: Prefer the signed NoIPC rebuild, using official binary package names.\n'
+       f'Package: {pin_names}\nPin: release o=PostgreSQL-NoIPC\nPin-Priority: 1001\n\n'
+       'Explanation: Reject stock PostgreSQL core packages, including future major versions.\n'
+       'Explanation: Keep postgresql-common and independently packaged extensions available.\n'
+       'Package: src:/^postgresql-[0-9]+([.][0-9]+)*$/:any src:postgresql:any postgresql:any postgresql-client:any\n'
+       'Pin: version *\nPin-Priority: -1\n')
 # Fixed timestamps make bootstrap/meta packages reproducible across index rebuilds.
 epoch = int(datetime.strptime(args.keyring_version.rsplit('.', 1)[0], '%Y.%m.%d').replace(tzinfo=timezone.utc).timestamp())
 env = dict(os.environ, SOURCE_DATE_EPOCH=str(epoch))
@@ -125,6 +132,15 @@ bootstrap = auxiliary_deb(
     {'usr/share/keyrings/postgresql-noipc-archive-keyring.gpg': public_key,
      'etc/apt/sources.list.d/postgresql-noipc.sources': source_config,
      'etc/apt/preferences.d/postgresql-noipc': pin})
+auxiliary_deb('postgresql', args.metapackage_version,
+              'PostgreSQL database server with the NoIPC kernel compatibility patch',
+              f'postgresql-18 (>= {version}), '
+              f'postgresql-noipc-archive-keyring (>= {args.keyring_version})', {})
+auxiliary_deb('postgresql-client', args.metapackage_version,
+              'front-end programs for the PostgreSQL NoIPC rebuild',
+              f'postgresql-client-18 (>= {version}), '
+              f'postgresql-noipc-archive-keyring (>= {args.keyring_version})', {})
+# Retain the already published alias byte-for-byte for existing installations.
 auxiliary_deb('postgresql-noipc', version,
               'PostgreSQL 18 rebuilt for Linux kernels without SysV IPC',
               f'postgresql-18 (>= {version}), postgresql-client-18 (>= {version})', {})
@@ -173,14 +189,20 @@ Inside the phone's Kali chroot, as root:
 curl -fLO {args.base_url.rstrip('/')}/postgresql-noipc-archive-keyring_all.deb
 apt install ./postgresql-noipc-archive-keyring_all.deb
 apt update
-apt install postgresql-noipc
+apt install postgresql postgresql-client
 systemctl enable --now postgresql
 systemctl status postgresql@18-main --no-pager
 pg_lsclusters
 ```
 
-`apt install postgresql-18` also selects this rebuild; the versioned name keeps the chosen major at 18.
-The archive preference keeps the NoIPC server from being replaced by a stock SysV-IPC build.
+The standard `postgresql` and `postgresql-client` metapackages select the NoIPC 18 packages.
+`postgresql-18` and all versioned binary package names also match the distribution names.
+`postgresql-noipc` remains available as a compatibility alias; it uses the same server package.
+The archive preference gives NoIPC packages priority 1001 and stock PostgreSQL core packages
+priority -1, including future major versions. Shared `postgresql-common` infrastructure and
+independently packaged extensions remain available from Kali. Existing clusters are not deleted.
+To update an installation bootstrapped with version 2026.10.29.1, run
+`apt update && apt install postgresql-noipc-archive-keyring && apt install postgresql postgresql-client`.
 Official `postgresql-common` provides cluster management, systemd/SysV service files, logging,
 and upgrade scripts. The target NetHunter chroot runs systemd, so enabling the service starts
 the database whenever that chroot's systemd boots. Other chroots without init can use `service`.

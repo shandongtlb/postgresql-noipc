@@ -1,0 +1,3 @@
+bb4bfd3018690eb6dcee8927df95cc6c01366b1e1c4dced460567c3889ef3bf2  postgresql-noipc-archive-keyring_all.deb
+07b96946ee5b08bafedf71a5bad05d46c9a9693fcfff461805b1d28cb1c3ab82  pool/main/p/postgresql/postgresql_18+noipc1_all.deb
+f19d953ff9a127c554050fa2a93aaea3efe93ba9a14bb68d8a84fc63e949ef2c  pool/main/p/postgresql-client/postgresql-client_18+noipc1_all.deb

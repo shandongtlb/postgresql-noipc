@@ -1,5 +1,7 @@
 # Kali NetHunter arm64 APT build verification
 
+This record describes the initial APT release (`3d45d5c`). Current standard metapackages and the stricter stock-core exclusion policy are covered in [the follow-up verification](apt-official-names-and-policy.md).
+
 Target: current Kali rolling arm64 NetHunter chroot with systemd. Build date: 2026-10-29.
 Upstream: PostgreSQL 18.6; official Debian/Kali packaging: 18.6-3; rebuild: 18.6-3+noipc1.
 

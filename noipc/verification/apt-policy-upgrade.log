@@ -1,0 +1,154 @@
+Get:1 http://127.0.0.1:18765 stable InRelease [2679 B]
+Get:2 http://127.0.0.1:18765 stable/main Sources [1768 B]
+Get:3 http://127.0.0.1:18765 stable/main arm64 Packages [6328 B]
+Hit:4 https://http.kali.org/kali kali-rolling InRelease
+Fetched 10.8 kB in 2s (6518 B/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Solving dependencies...
+The following packages will be upgraded:
+  postgresql-noipc-archive-keyring
+1 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Need to get 2740 B of archives.
+After this operation, 0 B of additional disk space will be used.
+Get:1 http://127.0.0.1:18765 stable/main arm64 postgresql-noipc-archive-keyring all 2026.10.29.2 [2740 B]
+Fetched 2740 B in 0s (15.8 kB/s)
+Preparing to unpack .../postgresql-noipc-archive-keyring_2026.10.29.2_all.deb ...
+Unpacking postgresql-noipc-archive-keyring (2026.10.29.2) over (2026.10.29.1) ...
+Setting up postgresql-noipc-archive-keyring (2026.10.29.2) ...
+Installing new version of config file /etc/apt/preferences.d/postgresql-noipc ...
+PASS: upgrading the original bootstrap installs the default stock-core deny policy
+postgresql:
+  Installed: (none)
+  Candidate: 18+noipc1
+  Version table:
+     18+noipc1 1001
+        500 http://127.0.0.1:18765 stable/main arm64 Packages
+     18+293 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+postgresql-client:
+  Installed: (none)
+  Candidate: 18+noipc1
+  Version table:
+     18+noipc1 1001
+        500 http://127.0.0.1:18765 stable/main arm64 Packages
+     18+293 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+postgresql-18:
+  Installed: 18.6-3+noipc1
+  Candidate: 18.6-3+noipc1
+  Version table:
+ *** 18.6-3+noipc1 1001
+        500 http://127.0.0.1:18765 stable/main arm64 Packages
+        100 /var/lib/dpkg/status
+     18.6-3 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+libpq5:
+  Installed: 18.6-3+noipc1
+  Candidate: 18.6-3+noipc1
+  Version table:
+ *** 18.6-3+noipc1 1001
+        500 http://127.0.0.1:18765 stable/main arm64 Packages
+        100 /var/lib/dpkg/status
+     18.6-3 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+postgresql-common:
+  Installed: 293
+  Candidate: 293
+  Version table:
+ *** 293 500
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+        100 /var/lib/dpkg/status
+postgresql-18-pgvector:
+  Installed: (none)
+  Candidate: 0.8.7-1
+  Version table:
+     0.8.7-1 500
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Solving dependencies...
+The following NEW packages will be installed:
+  postgresql postgresql-client
+0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 3676 B of archives.
+After this operation, 0 B of additional disk space will be used.
+Get:1 http://127.0.0.1:18765 stable/main arm64 postgresql all 18+noipc1 [1836 B]
+Get:2 http://127.0.0.1:18765 stable/main arm64 postgresql-client all 18+noipc1 [1840 B]
+Fetched 3676 B in 0s (20.9 kB/s)
+Selecting previously unselected package postgresql.
+Preparing to unpack .../postgresql_18+noipc1_all.deb ...
+Unpacking postgresql (18+noipc1) ...
+Selecting previously unselected package postgresql-client.
+Preparing to unpack .../postgresql-client_18+noipc1_all.deb ...
+Unpacking postgresql-client (18+noipc1) ...
+Setting up postgresql-client (18+noipc1) ...
+Setting up postgresql (18+noipc1) ...
+PASS: official postgresql/postgresql-client names install the same single NoIPC server and cluster
+active
+PASS: naming/policy migration leaves server binary, running instance and committed data intact
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Calculating upgrade...
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+PASS: normal APT upgrade resolves with the new policy and official metapackages installed
+Get:1 http://127.0.0.1:18765 stable InRelease [2679 B]
+Get:2 http://127.0.0.1:18765 stable/main arm64 Packages [6324 B]
+Hit:3 https://http.kali.org/kali kali-rolling InRelease
+Fetched 9003 B in 2s (5423 B/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Solving dependencies...
+0 upgraded, 0 newly installed, 1 reinstalled, 0 to remove and 0 not upgraded.
+Need to get 2748 B of archives.
+After this operation, 0 B of additional disk space will be used.
+Get:1 http://127.0.0.1:18765 stable/main arm64 postgresql-noipc-archive-keyring all 2026.10.29.2 [2748 B]
+Fetched 2748 B in 0s (15.8 kB/s)
+Preparing to unpack .../postgresql-noipc-archive-keyring_2026.10.29.2_all.deb ...
+Unpacking postgresql-noipc-archive-keyring (2026.10.29.2) over (2026.10.29.2) ...
+Setting up postgresql-noipc-archive-keyring (2026.10.29.2) ...
+Installing new version of config file /etc/apt/preferences.d/postgresql-noipc ...
+postgresql:
+  Installed: 18+noipc1
+  Candidate: 18+noipc1
+  Version table:
+ *** 18+noipc1 1001
+        500 http://127.0.0.1:18765 stable/main arm64 Packages
+        100 /var/lib/dpkg/status
+     18+293 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+postgresql-client:
+  Installed: 18+noipc1
+  Candidate: 18+noipc1
+  Version table:
+ *** 18+noipc1 1001
+        500 http://127.0.0.1:18765 stable/main arm64 Packages
+        100 /var/lib/dpkg/status
+     18+293 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+postgresql-18:
+  Installed: 18.6-3+noipc1
+  Candidate: 18.6-3+noipc1
+  Version table:
+ *** 18.6-3+noipc1 1001
+        500 http://127.0.0.1:18765 stable/main arm64 Packages
+        100 /var/lib/dpkg/status
+     18.6-3 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+libpq5:
+  Installed: 18.6-3+noipc1
+  Candidate: 18.6-3+noipc1
+  Version table:
+ *** 18.6-3+noipc1 1001
+        500 http://127.0.0.1:18765 stable/main arm64 Packages
+        100 /var/lib/dpkg/status
+     18.6-3 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+active
+PASS: final bootstrap installs the bounded core-source match and preserves the active database

@@ -1,0 +1,44 @@
+Get:1 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable InRelease [2679 B]
+Get:2 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main Sources [1768 B]
+Hit:3 https://http.kali.org/kali kali-rolling InRelease
+Get:4 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages [6324 B]
+Fetched 10.8 kB in 2s (6221 B/s)
+Reading package lists...
+postgresql:
+  Installed: 18+noipc1
+  Candidate: 18+noipc1
+  Version table:
+ *** 18+noipc1 1001
+        500 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages
+     18+293 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+postgresql-client:
+  Installed: 18+noipc1
+  Candidate: 18+noipc1
+  Version table:
+ *** 18+noipc1 1001
+        500 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages
+     18+293 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+postgresql-18:
+  Installed: 18.6-3+noipc1
+  Candidate: 18.6-3+noipc1
+  Version table:
+ *** 18.6-3+noipc1 1001
+        500 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages
+     18.6-3 -1
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+postgresql-common:
+  Installed: 293
+  Candidate: 293
+  Version table:
+ *** 293 500
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+PASS: signed public archive selects the official names from NoIPC and rejects stock core candidates
+Get:1 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 postgresql-client all 18+noipc1 [1840 B]
+Get:2 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 postgresql all 18+noipc1 [1836 B]
+Fetched 3676 B in 2s (2320 B/s)
+07b96946ee5b08bafedf71a5bad05d46c9a9693fcfff461805b1d28cb1c3ab82  postgresql_18+noipc1_all.deb
+f19d953ff9a127c554050fa2a93aaea3efe93ba9a14bb68d8a84fc63e949ef2c  postgresql-client_18+noipc1_all.deb
+bb4bfd3018690eb6dcee8927df95cc6c01366b1e1c4dced460567c3889ef3bf2  bootstrap.deb
+PASS: public bootstrap revision 2 and both standard-named metapackages download successfully

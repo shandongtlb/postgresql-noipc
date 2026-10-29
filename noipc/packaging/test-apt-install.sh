@@ -17,9 +17,12 @@ sed -i "s|^URIs: .*|URIs: $PG_APT_TEST_URI/|" "$PG_APT_SOURCE"
 apt-get update
 passed 'APT verifies the signed archive with a scoped Signed-By keyring'
 apt-cache policy postgresql-18
-apt-get -y --no-install-recommends install postgresql-noipc postgresql-18-jit \
+apt-get -y --no-install-recommends install postgresql postgresql-client postgresql-18-jit \
   postgresql-plperl-18 postgresql-plpython3-18 postgresql-pltcl-18
 [[ $(dpkg-query -W -f='${Version}' postgresql-18) == *+noipc* ]]
+[[ $(dpkg-query -W -f='${Version}' postgresql) == *+noipc* ]]
+[[ $(dpkg-query -W -f='${Version}' postgresql-client) == *+noipc* ]]
+grep -q '^Pin-Priority: -1$' /etc/apt/preferences.d/postgresql-noipc
 [[ -f /etc/init.d/postgresql ]]
 [[ -f /usr/lib/systemd/system/postgresql@.service || -f /lib/systemd/system/postgresql@.service ]]
 [[ -f /etc/logrotate.d/postgresql-common ]]
@@ -87,9 +90,9 @@ service postgresql restart
 [[ -s /var/log/postgresql/postgresql-18-main.log ]]
 passed 'package reinstall preserves data and configuration and supports normal restart/reload'
 service postgresql stop
-apt-get -y remove postgresql-noipc postgresql-18
+apt-get -y remove postgresql postgresql-18
 [[ -f /var/lib/postgresql/18/main/PG_VERSION && -f /etc/postgresql/18/main/postgresql.conf ]]
-apt-get -y --no-install-recommends install postgresql-noipc
+apt-get -y --no-install-recommends install postgresql postgresql-client
 service postgresql start
 [[ $(pg_sql -c 'SELECT count(*) FROM noipc_package_test') == 200000 ]]
 passed 'remove/reinstall retains the cluster and committed data'
