@@ -11,3 +11,5 @@ bash noipc/build.sh
 以后可从官方 `upstream/REL_18_STABLE` 合并维护更新。
 
 请阅读 [构建与同步上游说明](../noipc/README.md)。
+
+手机使用签名 APT 源安装，并通过官方 systemd 服务管理：[NetHunter arm64 APT 安装说明](../noipc/packaging/README.md)。

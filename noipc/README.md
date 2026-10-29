@@ -5,6 +5,20 @@
 源码位于仓库根目录的标准 PostgreSQL 路径，保留官方 `REL_18_6` 及其全部祖先提交，便于继续合并 `REL_18_STABLE`。构建脚本、补丁和历史验证记录放在 `noipc/`。
 先前两个发布源码快照提交仍通过合并保存在历史中。
 
+## 手机通过 APT 安装
+
+最新版 Kali NetHunter arm64 chroot（运行 systemd）可使用签名 APT 源和发行版服务管理：
+
+```bash
+curl -fLO https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt/postgresql-noipc-archive-keyring_all.deb
+apt install ./postgresql-noipc-archive-keyring_all.deb
+apt update
+apt install postgresql-noipc
+systemctl enable --now postgresql
+```
+
+[APT 安装、systemd 与打包说明](packaging/README.md)。该构建沿用 Debian/Kali 的完整功能和 `postgresql-common` 集群管理。
+
 ## 原生构建
 
 ```bash
@@ -53,6 +67,8 @@ git push origin main
 
 已有验证：231 项原生上游回归测试、原生与 arm64 QEMU 各 13 项集成检查全部通过；70 个 arm64 ELF 文件无 SysV IPC 函数导入。
 迁移历史时未改变这 6 个已验证的功能源码文件内容。迁移后已从 Git 标准布局重新原生构建，并再次通过禁用 SysV IPC 的 13 项集成检查。真实手机尚未验证。
-精简构建不包含 TLS、ICU、readline、zlib、LLVM JIT 和 liburing 等可选功能。
+上述原生/交叉脚本生成的便携精简构建不包含 TLS、ICU、readline、zlib、LLVM JIT 和 liburing 等可选功能；APT 包保留这些功能。
 
-[历史验证记录](verification/) · [手机安装说明](README.zh-CN.md) · [18.6 补丁](postgresql-18.6-no-sysvipc.patch) · [上游许可证](../COPYRIGHT)
+APT 包另通过 14 包/137 个 ELF 的审计、12 项 APT 集成检查、4 项 systemd/IPC 检查及公开软件源下载验证，见 [APT 验证报告](verification/apt-verification.md)。
+
+[历史验证记录](verification/) · [便携版手机安装说明](README.zh-CN.md) · [18.6 补丁](postgresql-18.6-no-sysvipc.patch) · [上游许可证](../COPYRIGHT)

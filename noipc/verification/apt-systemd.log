@@ -1,0 +1,9 @@
+PASS: systemd container processes inherit the no-SysV kernel simulation
+enabled
+active
+/var/run/postgresql:5432 - accepting connections
+PASS: official enabled service automatically started the existing 18/main cluster on systemd boot
+active
+PASS: official systemd start/stop/restart/reload and data persistence
+active
+PASS: official package maintscripts restart the systemd instance during reinstall and preserve committed data

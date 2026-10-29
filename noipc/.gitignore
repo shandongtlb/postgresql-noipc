@@ -11,3 +11,6 @@
 /tests/package-extract/
 __pycache__/
 *.pyc
+/packaging/upstream/
+/keys-private/
+/repository/

@@ -1,0 +1,13 @@
+PASS: APT verifies the signed archive with a scoped Signed-By keyring
+PASS: standard package names, postgresql-common services, logrotate and automatic 18/main cluster creation
+PASS: official service starts the cluster with SysV IPC disabled
+PASS: SQL and parallel query using the official installed layout
+PASS: TLS connection and SCRAM password authentication
+PASS: official Python, Perl and Tcl language packages
+PASS: LLVM/JIT module loads and compiles a query
+PASS: pg_createcluster/pg_ctlcluster/pg_dropcluster support a second cluster
+PASS: standard data directory remains protected against a second server
+PASS: package reinstall preserves data and configuration and supports normal restart/reload
+PASS: remove/reinstall retains the cluster and committed data
+PASS: authenticated deb-src source package download
+All 12 APT/package integration checks passed

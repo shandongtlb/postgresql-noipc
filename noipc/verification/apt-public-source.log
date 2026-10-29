@@ -1,0 +1,19 @@
+Get:1 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable InRelease [2679 B]
+Get:2 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main Sources [1768 B]
+Hit:3 https://http.kali.org/kali kali-rolling InRelease
+Get:4 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages [5808 B]
+Fetched 10.3 kB in 2s (5848 B/s)
+Reading package lists...
+postgresql-18:
+  Installed: 18.6-3+noipc1
+  Candidate: 18.6-3+noipc1
+  Version table:
+ *** 18.6-3+noipc1 1001
+        500 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 Packages
+     18.6-3 500
+        500 https://http.kali.org/kali kali-rolling/main arm64 Packages
+PASS: public GitHub APT signature, scoped key and NoIPC candidate priority
+Get:1 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 postgresql-18 arm64 18.6-3+noipc1 [6833 kB]
+Get:2 https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt stable/main arm64 postgresql-noipc all 18.6-3+noipc1 [1820 B]
+Fetched 6835 kB in 2s (4165 kB/s)
+PASS: public bootstrap and authenticated ARM64 server/metapackage downloads

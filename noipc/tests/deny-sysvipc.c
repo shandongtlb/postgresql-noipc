@@ -1,4 +1,4 @@
-/* Execute a command with System V shared-memory and semaphore syscalls disabled.
+/* Execute a command with System V shared-memory, semaphore and message queues disabled.
  * The filter survives exec and fork, just like a kernel without CONFIG_SYSVIPC.
  */
 #define _GNU_SOURCE
@@ -19,6 +19,7 @@ int main(int argc, char **argv)
 		BPF_STMT(BPF_LD|BPF_W|BPF_ABS, offsetof(struct seccomp_data, nr)),
 		DENY(shmget), DENY(shmat), DENY(shmdt), DENY(shmctl),
 		DENY(semget), DENY(semop), DENY(semtimedop), DENY(semctl),
+		DENY(msgget), DENY(msgsnd), DENY(msgrcv), DENY(msgctl),
 		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW)
 	};
 	struct sock_fprog prog = { sizeof(filter)/sizeof(filter[0]), filter };
