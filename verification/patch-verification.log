@@ -1,0 +1,7 @@
+checking file src/backend/port/sysv_shmem.c
+checking file src/backend/utils/init/miscinit.c
+checking file src/include/storage/pg_shmem.h
+checking file src/include/storage/dsm_impl.h
+checking file src/bin/initdb/initdb.c
+checking file src/backend/utils/misc/guc_tables.c
+All 6 patched files match the current source and patch generator.

@@ -1,0 +1,4 @@
+# Unified diff context and raw tool output intentionally contain whitespace.
+*.patch -whitespace
+verification/*.log -whitespace
+*.sh text eol=lf

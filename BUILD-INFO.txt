@@ -1,0 +1,34 @@
+PostgreSQL 18.6 Linux arm64 no-SysV IPC
+Build host: Linux-7.0.0-42-generic-x86_64-with-glibc2.43
+Source URL: https://ftp.postgresql.org/pub/source/v18.6/postgresql-18.6.tar.bz2
+Source SHA256: 555610c24d53e4316da5b7d3fc25c279d96856d5e0e23ee308c328c5fa881d9f
+Patch SHA256: 305a6d17cb0453c5ddb23cee15526b0874b3f34f8aec78ee841cc3a7cc662e6d
+Compiler: aarch64-linux-gnu-gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+Baseline: Debian bookworm arm64 glibc 2.36; ARMv8-A, no outline atomics
+Sysroot absolute library symlinks normalized to relative symlinks inside the sysroot.
+Sysroot packages:
+[
+  {
+    "Package": "libc6",
+    "Version": "2.36-9+deb12u14",
+    "Filename": "pool/main/g/glibc/libc6_2.36-9+deb12u14_arm64.deb",
+    "SHA256": "01f4330719fd4f65580e16ea5a0527f372fca750e8f588d26deaf09f2d3b1cf4"
+  },
+  {
+    "Package": "libc6-dev",
+    "Version": "2.36-9+deb12u14",
+    "Filename": "pool/main/g/glibc/libc6-dev_2.36-9+deb12u14_arm64.deb",
+    "SHA256": "8bc395bf2ee9939f1a6ae395f974cffdcf541d98f99adfe89ce7e4bef36d159e"
+  },
+  {
+    "Package": "linux-libc-dev",
+    "Version": "6.1.176-1",
+    "Filename": "pool/main/l/linux/linux-libc-dev_6.1.176-1_arm64.deb",
+    "SHA256": "eeca5ec13bed7206f8171fab9a48e84119dcc20cc79557f104628447a524ad10"
+  }
+]
+
+Configure command (from build/arm64):
+pgac_cv_prog_cc_LDFLAGS_EX_BE__Wl___export_dynamic=yes ../../src/postgresql-18.6/configure --build=x86_64-pc-linux-gnu --host=aarch64-linux-gnu --prefix=/opt/pgsql-18-no-sysvipc CC=/opt/postgresql-no-sysvipc/toolchain/aarch64-cc AR=aarch64-linux-gnu-ar RANLIB=aarch64-linux-gnu-ranlib STRIP=aarch64-linux-gnu-strip CFLAGS="-O2 -march=armv8-a -mno-outline-atomics" LDFLAGS="-static-libgcc" --without-icu --without-readline --without-zlib --without-liburing
+make -j3
+make install DESTDIR=/opt/postgresql-no-sysvipc/stage-arm64

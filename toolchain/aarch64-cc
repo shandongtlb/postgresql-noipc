@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+PG_SYSROOT_DIR=$(cd -- "$(dirname -- "$0")/sysroot" && pwd)
+exec aarch64-linux-gnu-gcc --sysroot="$PG_SYSROOT_DIR" \
+  -B"$PG_SYSROOT_DIR/usr/lib/aarch64-linux-gnu/" \
+  -isystem "$PG_SYSROOT_DIR/usr/include" \
+  -isystem "$PG_SYSROOT_DIR/usr/include/aarch64-linux-gnu" \
+  -L"$PG_SYSROOT_DIR/usr/lib/aarch64-linux-gnu" \
+  -L"$PG_SYSROOT_DIR/lib/aarch64-linux-gnu" "$@"

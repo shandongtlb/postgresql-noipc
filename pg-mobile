@@ -1,0 +1,61 @@
+#!/bin/bash
+set -euo pipefail
+PG_MOBILE_PREFIX=$(cd -- "$(dirname -- "$0")" && pwd)
+cd "$PG_MOBILE_PREFIX"
+export PATH="$PG_MOBILE_PREFIX/bin:$PATH"
+export LD_LIBRARY_PATH="$PG_MOBILE_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export PGDATA=${PGDATA:-"$PG_MOBILE_PREFIX/var/data"}
+export PGHOST=${PGHOST:-"$PG_MOBILE_PREFIX/var/run"}
+export PGPORT=${PGPORT:-5432}
+PG_MOBILE_ACTION=${1:-help}
+if [[ $# -gt 0 ]]; then shift; fi
+
+case "$PG_MOBILE_ACTION" in
+  init|start|stop|restart|status|psql) ;;
+  *) printf 'Usage: %s {init|start|stop|restart|status|psql [args...]}\n' "$0"; exit 2 ;;
+esac
+
+if [[ $(id -u) == 0 ]]; then
+  if ! id postgres >/dev/null 2>&1; then
+    useradd --system --user-group --home-dir /nonexistent --shell /usr/sbin/nologin postgres
+  fi
+  if [[ $PG_MOBILE_ACTION == init ]]; then
+    install -d -m 0755 "$PG_MOBILE_PREFIX/var"
+    install -d -o postgres -g "$(id -gn postgres)" -m 0700 "$PGDATA" "$PGHOST"
+  fi
+  exec runuser -u postgres -- env \
+    LD_LIBRARY_PATH="$LD_LIBRARY_PATH" PGDATA="$PGDATA" PGHOST="$PGHOST" PGPORT="$PGPORT" \
+    "$PG_MOBILE_PREFIX/pg-mobile" "$PG_MOBILE_ACTION" "$@"
+fi
+
+case "$PG_MOBILE_ACTION" in
+  init)
+    if [[ -e $PGDATA/PG_VERSION ]]; then
+      echo "Database already initialized: $PGDATA"; exit 0
+    fi
+    mkdir -p "$PGDATA" "$PGHOST"
+    chmod 0700 "$PGDATA" "$PGHOST"
+    "$PG_MOBILE_PREFIX/bin/initdb" -D "$PGDATA" -U postgres --locale=C --encoding=UTF8 \
+      --auth-local=peer --auth-host=scram-sha-256 --no-instructions
+    # Escape directory names using PostgreSQL's string-literal rules.
+    PG_MOBILE_SOCKET_SQL=${PGHOST//\'/\'\'}
+    cat >> "$PGDATA/postgresql.conf" <<EOF
+
+# Mobile Kali chroot defaults
+listen_addresses = ''
+port = $PGPORT
+unix_socket_directories = '$PG_MOBILE_SOCKET_SQL'
+shared_memory_type = mmap
+dynamic_shared_memory_type = mmap
+shared_buffers = 32MB
+max_connections = 30
+huge_pages = off
+EOF
+    ;;
+  start|restart)
+    "$PG_MOBILE_PREFIX/bin/pg_ctl" -D "$PGDATA" -l "$PGDATA/server.log" -w "$PG_MOBILE_ACTION" "$@"
+    ;;
+  stop) "$PG_MOBILE_PREFIX/bin/pg_ctl" -D "$PGDATA" -m fast -w stop "$@" ;;
+  status) "$PG_MOBILE_PREFIX/bin/pg_ctl" -D "$PGDATA" status "$@" ;;
+  psql) exec "$PG_MOBILE_PREFIX/bin/psql" -U postgres -d postgres "$@" ;;
+esac
