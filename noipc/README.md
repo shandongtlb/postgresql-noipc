@@ -52,7 +52,7 @@ git push origin main
 目录 inode flock 随 fork 继承，孤儿后端仍存活时继续保护数据目录。
 
 已有验证：231 项原生上游回归测试、原生与 arm64 QEMU 各 13 项集成检查全部通过；70 个 arm64 ELF 文件无 SysV IPC 函数导入。
-迁移历史时未改变这 6 个已验证的功能源码文件内容。真实手机尚未验证。
+迁移历史时未改变这 6 个已验证的功能源码文件内容。迁移后已从 Git 标准布局重新原生构建，并再次通过禁用 SysV IPC 的 13 项集成检查。真实手机尚未验证。
 精简构建不包含 TLS、ICU、readline、zlib、LLVM JIT 和 liburing 等可选功能。
 
 [历史验证记录](verification/) · [手机安装说明](README.zh-CN.md) · [18.6 补丁](postgresql-18.6-no-sysvipc.patch) · [上游许可证](../COPYRIGHT)

@@ -44,3 +44,7 @@
 没有访问你的真实手机，arm64 验证使用 QEMU；需要手机 Kali 自己提供 glibc、Linux 文件系统上的目录 flock、mmap 与 POSIX/futex 同步支持。
 不需要 SysV IPC，也不需要 `/dev/shm`。包为依赖精简构建，关闭 TLS、ICU、readline、zlib、LLVM JIT 和 liburing 等可选功能。
 初次使用请创建新数据目录；已有数据库的迁移按 PostgreSQL 大版本升级规则进行。
+
+## Git 历史与布局迁移验证
+
+已迁移到官方 REL_18_6 的完整 Git 历史，源码恢复上游标准目录，辅助文件位于 noipc/。新本机工作目录为 /opt/postgresql-noipc。迁移后重新原生构建成功，禁用 SysV IPC 的 13 项集成检查再次全部通过；详细记录见 verification/upstream-history.txt 与 verification/integration-native-git.log。

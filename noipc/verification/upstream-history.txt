@@ -1,0 +1,12 @@
+Upstream: https://git.postgresql.org/git/postgresql.git
+Maintenance branch: REL_18_STABLE
+Baseline: REL_18_6 724edf9bde9d356724ad384a2e196edc3c9f80f7
+Full baseline commit count: 62601
+Shallow repository: false
+Earlier snapshot tip 29d85e3d9c0cb819da78e1de9c8a2006c2c9c5b2 remains an ancestor.
+The 6 functional source files match the previously validated implementation byte for byte.
+Preview merge against cc4bf6e9acc9b9a385e37bd13bd55b5c941529cc succeeds without conflicts.
+The maintenance branch updates have only been previewed, not merged.
+Standard-layout native build/install: passed (PostgreSQL 18.6).
+git fsck --connectivity-only --no-dangling: passed.
+Standard-layout native integration with SysV IPC disabled: all 13 checks passed.
