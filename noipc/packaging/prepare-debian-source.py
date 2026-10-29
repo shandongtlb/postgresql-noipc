@@ -6,14 +6,18 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import urllib.request
+from versions import package_versions
 
 base = Path(__file__).resolve().parents[1]
 manifest = json.loads((base / 'packaging/manifest.json').read_text())
-if manifest['noipc_version'] != manifest['debian_version']:
-    raise SystemExit('PostgreSQL versions must exactly match the official Debian/Kali version')
+versions = package_versions(manifest)
+archive_version = manifest['archive_keyring_version']
+if not re.fullmatch(r'[0-9]+(?:\.[0-9]+)+', archive_version):
+    raise SystemExit('Invalid archive build revision')
 parser = argparse.ArgumentParser()
 parser.add_argument('output', type=Path, help='parent directory for unpacked source and orig tarball')
 args = parser.parse_args()
@@ -64,7 +68,7 @@ with (debian / 'patches/series').open('a') as f:
     f.write('\nnoipc-linux-mmap-directory-lock.patch\n')
 subprocess.run(['dpkg-source', '--before-build', str(source)], check=True)
 
-# A new Debian revision keeps the standard binary package names and lifecycle.
+# Keep official package names and add the local Debian packaging revision.
 stamp = (datetime.fromtimestamp(int(os.environ['SOURCE_DATE_EPOCH']), timezone.utc)
          if 'SOURCE_DATE_EPOCH' in os.environ else datetime.now(timezone.utc))
 now = stamp.strftime('%a, %d %b %Y %H:%M:%S +0000')
@@ -83,6 +87,16 @@ text = control.read_text().replace(
 text = text.replace('Source: postgresql-18\n', 'Source: postgresql-18\nXB-PostgreSQL-NoIPC: yes\n', 1)
 if 'XB-PostgreSQL-NoIPC: yes' not in text:
     raise SystemExit('Could not add the NoIPC binary marker to Debian control')
+# Core packages require the source policy and installation guard as well.
+paragraphs = text.split('\n\n')
+for i, paragraph in enumerate(paragraphs):
+    if not re.search(r'^Package: ', paragraph, re.M):
+        continue
+    dependency = f'postgresql-noipc-archive-keyring (>= {archive_version}),'
+    if not re.search(r'^Depends:', paragraph, re.M):
+        raise SystemExit('Expected a Depends field in every PostgreSQL binary stanza')
+    paragraphs[i] = re.sub(r'^Depends:', 'Depends: ' + dependency, paragraph, count=1, flags=re.M)
+text = '\n\n'.join(paragraphs)
 control.write_text(text)
 
 for name in functional_files:
@@ -92,11 +106,8 @@ for name in functional_files:
 # Create source artifacts while the tree is clean, before autoreconf/make add
 # generated files. This is also the normal Debian source-before-binary order.
 subprocess.run(['dpkg-source', '--build', source.name], cwd=out, check=True)
-binary_version = manifest.get('binary_version', manifest['debian_version'])
-if binary_version != manifest['debian_version']:
-    import re
-    if not re.fullmatch(re.escape(manifest['debian_version']) + r'\+b[0-9]+', binary_version):
-        raise SystemExit('Unsupported official binary-only revision')
+binary_version = versions['binary']
+if binary_version != versions['source']:
     binary_entry = (f"postgresql-18 ({binary_version}) kali-rolling; urgency=medium, binary-only=yes\n\n"
                     '  * Match the official Kali arm64 binary-only rebuild revision.\n\n'
                     f' -- SDTLB <40312509+shandongtlb@users.noreply.github.com>  {now}\n\n')

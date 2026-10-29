@@ -16,5 +16,5 @@ for line in sys.stdin:
     if core and field('PostgreSQL-NoIPC')!='yes':
         print(f'NoIPC policy refuses stock PostgreSQL package: {package} ({path}).\n'
               'Restore the managed NoIPC source at the start of /etc/apt/sources.list, '
-              'then run apt update and postgresql-noipc-upgrade.',file=sys.stderr)
+              'then run apt update and apt dist-upgrade.',file=sys.stderr)
         sys.exit(1)

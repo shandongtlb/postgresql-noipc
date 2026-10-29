@@ -1,8 +1,8 @@
 # 安装、日常更新与自动发布维护手册
 
-适用范围：运行 systemd 的 Kali NetHunter **arm64 chroot**，内核没有 CONFIG_SYSVIPC。当前构建采用 Kali rolling 的完整运行功能，glibc 至少 2.43。数据库源码、包名及包版本保持上游/发行版规范，NoIPC 的区别记录在包的 `Postgresql-Noipc: yes` 字段和签名软件源中。
+适用范围：运行 systemd 的 Kali NetHunter **arm64 chroot**，内核没有 CONFIG_SYSVIPC。当前构建采用 Kali rolling 的完整运行功能，glibc 至少 2.43。PostgreSQL 本身的版本跟随官方（当前 18.6），包名、路径和服务沿用发行版规范；Debian 包修订号使用 `+noipcN`，让标准 APT 能识别每次重编译。包另带 `Postgresql-Noipc: yes` 标记。
 
-## 手机首次安装，或从此前的自定义版本迁移
+## 手机添加软件源与首次安装
 
 在手机 Kali chroot 内，以 root 执行整段：
 
@@ -13,7 +13,10 @@ curl -fL \
   https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt/postgresql-noipc-archive-keyring_all.deb \
   -o /tmp/postgresql-noipc-archive-keyring_all.deb
 apt install -y /tmp/postgresql-noipc-archive-keyring_all.deb
-postgresql-noipc-upgrade -y
+apt update
+apt dist-upgrade
+# 原来没有安装 PostgreSQL 时，再安装一次标准包：
+apt install -y postgresql postgresql-client
 systemctl enable --now postgresql
 systemctl status postgresql@18-main --no-pager
 pg_lsclusters
@@ -22,19 +25,22 @@ runuser -u postgres -- psql
 
 在 psql 中输入 `\q` 退出。
 
-`postgresql-noipc-upgrade` 内部使用 APT，安装标准的 `postgresql` / `postgresql-client` / `postgresql-18` 等包，并重新安装本源提供的已安装 PG18 核心组件。它同时处理从旧的 `+noipc` 自定义版本降到**相同官方版本号**的迁移，不删除集群和数据。首次迁移必须运行它：Kali 可能已经装了同版本官方包，仅执行普通 `apt install` 不保证将它替换成修改版。
+添加源后，已安装的官方包、此前使用官方完整包版本的 NoIPC 构建，以及后续重编译都通过 `apt update && apt dist-upgrade` 切换/更新；不需要专用升级命令。从未安装过 PostgreSQL 的系统仍需执行一次 `apt install postgresql postgresql-client`。
 
-本方案首次沿用的官方服务端版本为 **18.6-3**，两个标准元包为 **18+293**。后续版本同样直接采用 Kali 对应官方版本，当前值以 `manifest.json`、`published.json` 和 `apt-cache policy` 为准。源配置辅助包有独立版本，因为官方没有这个辅助包。此前的 `postgresql-noipc` 只作为兼容元包保留，依赖同一份服务端。
+当前服务端包为 **18.6-3+noipc2**，标准元包为 **18+293+noipc2**，PostgreSQL 的上游版本仍为 **18.6**。每次发布递增全局 `noipc_revision`；即使官方源码版本不变，也会产生 `+noipc3`、`+noipc4` 等新包版本。元包同样递增，避免被 APT 视为已更新而漏掉新构建。源配置辅助包使用独立日期修订。
+
+早期试验元包曾使用 `18+noipc1`，迁移时 APT 可能显示元包降级；普通交互式 `apt dist-upgrade` 按本源优先级处理，确认清单即可。若用 `-y` 自动确认这一次旧元包迁移，需要按 APT 规则加 `--allow-downgrades`。旧的 `postgresql-noipc-upgrade` 只作为手动恢复工具保留，日常不使用。
 
 先前便携版 `/opt/pgsql-18-no-sysvipc` 的数据不会自动搬到发行版目录。需要迁移旧库时，先备份并停止便携实例，再导入新集群，避免两个实例争用端口或数据目录。
 
-## 同版本下如何确保不会装回官方核心包
+## 如何确保不会装回官方核心包
 
-APT 偏好规则会优先选择签名 NoIPC 源，并阻止其他版本的官方核心包，包括未经适配的新大版本。**相同版本号在 APT 中可能合并为一个候选版本，不能只靠优先级判断下载来自哪里**，因此同时启用：
+APT 偏好规则优先选择签名 NoIPC 源，并阻止官方核心包及未经适配的新大版本。同时启用：
 
-1. `/etc/apt/sources.list` 最前面的受管理 NoIPC 源条目，保证同版本下载优先选本源。
+1. `/etc/apt/sources.list` 最前面的受管理 NoIPC 源条目，保证下载优先选本源。
 2. `/etc/apt/apt.conf.d/99-postgresql-noipc` 的安装前校验：没有 `Postgresql-Noipc: yes` 的 PostgreSQL 核心包不能交给 dpkg 安装。
-3. 使用内容哈希作为 pool 子目录。同版本重建后的下载 URL 会变化，避免复用旧包缓存。
+3. 核心包依赖源配置辅助包，确保签名源、偏好规则及安装前校验配套安装。PG 包自身的 `+noipcN` 修订号递增，APT 按正常版本比较升级，无需修改 APT 的下载缓存或在更新索引时安装软件。
+4. 软件包 URL 使用内容哈希目录，每批发布有独立路径。
 
 公共服务包 `postgresql-common`、`postgresql-client-common` 以及独立源码包构建的扩展（如 pgvector）继续由 Kali 更新。规则不自动删除已有的其他大版本，也不处理这些大版本的数据迁移。
 
@@ -47,7 +53,7 @@ dpkg-query -W -f='${Package} ${Version} ${Postgresql-Noipc}\n' \
   postgresql postgresql-client postgresql-18 postgresql-client-18 libpq5
 ```
 
-同版本时，`apt-cache policy` 可能同时列出两个来源；`--print-uris` 的下载地址应包含本 GitHub APT 源。上面查询的五个包都应显示 `yes`。
+`apt-cache policy` 应显示带 `+noipcN` 的候选包，来自本 GitHub APT 源；`--print-uris` 的下载地址应包含本 GitHub APT 源。上面查询的五个包都应显示 `yes`。
 
 刚发布时若遇到 GitHub 缓存导致的 404，稍后重新执行 `apt update`，不要切回官方核心包。
 
@@ -56,29 +62,30 @@ dpkg-query -W -f='${Package} ${Version} ${Postgresql-Noipc}\n' \
 ```bash
 /usr/lib/postgresql-noipc/configure-source
 apt update
-postgresql-noipc-upgrade -y
+apt dist-upgrade
 ```
 
 不要删除公钥或安装前校验来绕过报错；先检查软件源是否可访问、源顺序是否正确、发布是否完成。
 
 ## 手机日常更新
 
-当维护者发布了新的**官方版本号**：
+添加源之后，日常只需：
 
 ```bash
-apt update
-apt upgrade
+apt update && apt dist-upgrade
+```
+
+新官方版本、NoIPC 补丁变化，以及只更新构建依赖的重编译均使用这条命令。每次发布都有更大的包修订号，无需显式重装、手动指定来源或额外运行辅助工具。APT 正常展示升级清单并等待确认；更新成功后，再执行 `dist-upgrade` 不会重复安装当前构建。
+
+可用以下命令先看计划及更新后的服务状态：
+
+```bash
+apt -s dist-upgrade
 pg_lsclusters
 systemctl status postgresql@18-main --no-pager
 ```
 
-当官方版本未变，但 NoIPC 补丁、打包或构建依赖变化导致同版本重新发布：
-
-```bash
-postgresql-noipc-upgrade -y
-```
-
-这是精确沿用官方版本号的代价：同版本重建不会可靠地触发普通升级。安装过程沿用官方维护脚本，可能重启数据库，执行时间由手机使用者决定。构建机定时任务负责发布包，**不会远程操作手机或自动重启手机数据库**。
+安装沿用官方维护脚本，可能重启数据库。构建机定时任务负责发布包，不远程操作手机。手动 hold 的包、未启用的源及已有依赖冲突仍遵循 APT 的正常规则。
 
 可选功能按官方包名安装，例如：
 
@@ -113,8 +120,8 @@ apt install postgresql-18-jit postgresql-plpython3-18 postgresql-plperl-18 postg
 2. 跟进 Kali 提供的 PostgreSQL 18 正式维护版及 Debian/Kali 打包修订（含官方的 `+bN` 二进制重建修订）。确认对应官方 Git 发布标签位于 18 稳定分支中。
 3. 比较发行版版本、源码哈希和构建配方指纹。无变化就结束，不重复构建/发布。
 4. 在独立 Git worktree 中合并正式发布标签。保留 NoIPC 的 mmap 和继承式目录锁实现。合并冲突会中止，等待维护者处理。
-5. 从已校验的官方源码和 Debian 打包规则生成新的补丁及 `.dsc`，在 Kali arm64 构建根中构建完整运行功能包，版本号保持发行版版本。
-6. 审计真实 ARM64 ELF；验证 APT 候选策略、安装前拒绝官方核心包、安装/重装、TLS、PL、JIT、并行查询、多集群、数据保留、systemd 自启及包维护脚本重启；另执行 13 项已安装程序的崩溃恢复、孤儿后端锁保护和备份恢复检查。
+5. 递增全局 NoIPC 包修订及源配置辅助包版本；从已校验的官方源码和 Debian 打包规则生成补丁及 `.dsc`，在 Kali arm64 构建根中构建完整运行功能包。PG 上游版本不改，Debian 包版本加 `+noipcN`。只有确认包版本高于上次发布才继续。
+6. 审计真实 ARM64 ELF；用真实 APT 验证官方包切换、旧 NoIPC 修订更新、辅助包已更新的情况与更新后不重复安装；验证候选策略、安装前拒绝官方核心包、安装/重装、TLS、PL、JIT、并行查询、多集群、数据保留、systemd 自启及包维护脚本重启；保留上次测试安装时，还会先在其既有数据库上实际执行升级并检查数据、配置和重复升级；另执行 13 项已安装程序的崩溃恢复、孤儿后端锁保护和备份恢复检查。
 7. 签名 APT 仓库。仅保留当前一批包和源码、当前索引及哈希寻址数据。
 8. 用 Git 原子推送同时更新 `main` 和 `apt`。`main` 正常向前提交，保留官方源码历史；`apt` 替换为**仅一个提交的当前快照**。远端发生并发变化时拒绝覆盖。
 
@@ -137,7 +144,7 @@ cd /opt/postgresql-noipc
 python3 noipc/packaging/update.py --check
 ```
 
-同版本强制重建并通过测试后发布：
+上游版本未变时强制重建，通过测试后递增包修订发布：
 
 ```bash
 cd /opt/postgresql-noipc
@@ -188,13 +195,17 @@ python3 noipc/packaging/test-update-publish.py
 python3 noipc/packaging/test-packages.py \
   --rootfs noipc/build/packaging/kali-arm64-rootfs \
   --repository noipc/repository --state noipc/build/packaging/integration
+python3 noipc/packaging/test-dist-upgrade.py noipc/repository \
+  --rootfs noipc/build/packaging/integration/testroot
 bash noipc/packaging/install-update-timer.sh
 python3 noipc/packaging/update.py --check
 ```
 
 新机器上的 `build-debs.sh` 会引导 Kali 根目录。`nocheck nodoc` 仅跳过包构建时的测试和独立文档包；运行功能保留，集成测试由独立步骤执行。不要把这些命令放到手机数据库运行根目录里。
 
-`manifest.json` 的 `noipc_version` 是遗留字段名，值必须与 `debian_version` 完全相同，不能加 NoIPC 或日期后缀；`binary_version` 另行记录官方二进制版本，允许官方已有的 `+bN` 后缀；`metapackage_version` 采用 Kali 对应的标准元包版本。
+`manifest.json` 分开记录官方和本地版本：`debian_version` 是官方源码包版本，`binary_version` 是官方 ARM64 二进制版本，`metapackage_version` 是官方元包版本。`noipc_revision` 为全局递增整数，`noipc_version` 为源码包版本（如 `18.6-3+noipc2`）。`versions.py` 生成实际二进制和元包版本；官方已有 `+bN` 时，二进制版本采用 `18.6-3+noipc2+bN`，Source 仍指向 `18.6-3+noipc2`。
+
+`noipc_revision` 每次重编译都递增，跟进新官方版本时也不重置，确保未变的元包版本仍能持续升级。`archive_keyring_version` 是辅助包的独立日期修订；自动任务在构建前处理这些字段。`published.json` 同时记录官方版本和实际发布的 `noipc_*_version`。
 
 ## 上游合并冲突或打包变化时
 
@@ -210,11 +221,11 @@ journalctl -u postgresql-noipc-update.service -n 200 --no-pager
 
 如果 Kali 默认元包已经切到 19，自动任务会停止，让维护者明确选择后续策略；不会自动跨大版本迁移数据库。源码仍可跟踪 PostgreSQL 18 的维护分支。
 
-修改构建流程/源配置辅助包后，记得在构建机上 `git pull --ff-only` 更新定时任务使用的程序；更改辅助包内容时递增其自身版本；定时任务检测到辅助包字节变化时会自动递增它的独立版本。修改当前源配置辅助包与官方 PG 版本无关。任务的配方指纹会检测代码变化；同版本重建后提醒手机端运行 `postgresql-noipc-upgrade`。
+修改构建流程/源配置辅助包后，记得在构建机上 `git pull --ff-only` 更新定时任务使用的程序。任务的配方指纹会检测代码变化；每次构建前递增 `noipc_revision` 和辅助包修订。手动发布另一批包时，同样更新 manifest 的版本字段并重新准备源码及包；不能只替换文件而复用旧包版本。建议统一使用 `update.py --rebuild`。
 
 ## 发布保留策略与验证边界
 
-APT 分支只有最新快照；旧 `.deb`、旧源码压缩包及旧索引从当前快照删除。不覆盖源码 `main` 的官方 Git 历史。同版本重建保持官方版本号，pool 路径用内容哈希区分新包；手机需要显式重装，不能依靠版本号猜测代码变化。
+APT 分支只有最新快照；旧 `.deb`、旧源码压缩包及旧索引从当前快照删除。不覆盖源码 `main` 的官方 Git 历史。上游版本未变的重编译通过更大的 `+noipcN` 修订号发布，手机仍用普通 `apt dist-upgrade`。
 
 最新发布状态和审计见 `noipc/packaging/published.json`、`noipc/verification/latest-update.json` 及 `apt-deb-audit.json`。仿真测试不等于手机实机测试；手机安装后请用 `pg_lsclusters` 和实例服务状态确认。
 

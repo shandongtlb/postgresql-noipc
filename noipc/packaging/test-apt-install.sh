@@ -11,15 +11,21 @@ PG_TEST_RESULTS=/tmp/noipc-apt-test-results.txt
 passed() { printf 'PASS: %s\n' "$1" | tee -a "$PG_TEST_RESULTS"; }
 cleanup() { service postgresql stop >/dev/null 2>&1 || true; }
 trap cleanup EXIT
+stock_libpq_version=$(dpkg-query -W -f='${Version}' libpq5)
+[[ $(dpkg-query -W -f='${Postgresql-Noipc}' libpq5) != yes ]]
 curl -fL "$PG_APT_TEST_URI/postgresql-noipc-archive-keyring_all.deb" -o /tmp/postgresql-noipc-keyring.deb
 apt-get -y --no-install-recommends install /tmp/postgresql-noipc-keyring.deb ssl-cert
 /usr/lib/postgresql-noipc/configure-source --url "$PG_APT_TEST_URI"
 apt-get update
 passed 'APT verifies the signed archive with a scoped Signed-By keyring'
 apt-cache policy postgresql-18
-postgresql-noipc-upgrade --no-update -y
+apt -y dist-upgrade
+[[ $(dpkg-query -W -f='${Postgresql-Noipc}' libpq5) == yes ]]
+dpkg --compare-versions "$(dpkg-query -W -f='${Version}' libpq5)" gt "$stock_libpq_version"
+passed 'plain apt dist-upgrade replaces the installed stock libpq5 with a newer NoIPC package revision'
 apt-get -y --no-install-recommends install postgresql postgresql-client postgresql-18-jit \
-  postgresql-plperl-18 postgresql-plpython3-18 postgresql-pltcl-18
+  postgresql-plperl-18 postgresql-plpython3-18 postgresql-pltcl-18 \
+  libecpg-compat3 libecpg-dev libecpg6 libpgtypes3 libpq-dev libpq-oauth postgresql-server-dev-18
 [[ $(dpkg-query -W -f='${Postgresql-Noipc}' postgresql-18) == yes ]]
 [[ $(dpkg-query -W -f='${Postgresql-Noipc}' postgresql) == yes ]]
 [[ $(dpkg-query -W -f='${Postgresql-Noipc}' postgresql-client) == yes ]]

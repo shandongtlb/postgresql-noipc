@@ -13,7 +13,8 @@
 curl -fLO https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt/postgresql-noipc-archive-keyring_all.deb
 apt install ./postgresql-noipc-archive-keyring_all.deb
 apt update
-postgresql-noipc-upgrade -y
+apt dist-upgrade
+apt install postgresql postgresql-client
 systemctl enable --now postgresql
 ```
 

@@ -13,6 +13,7 @@ import signal
 import subprocess
 import sys
 import time
+from versions import package_versions
 
 CORE=('src/backend/port/sysv_shmem.c','src/backend/utils/init/miscinit.c',
       'src/backend/utils/misc/guc_tables.c','src/bin/initdb/initdb.c',
@@ -55,6 +56,9 @@ def discover(root):
             candidate=record
     if not candidate: raise RuntimeError('No signed Kali postgresql-18 source record')
     binary=next(records(output(['chroot',root,'apt-cache','show','--no-all-versions','postgresql-18'])))
+    meta=next(records(output(['chroot',root,'apt-cache','show','--no-all-versions','postgresql'])))['Version']
+    if not meta.startswith('18+'):
+        raise RuntimeError('Kali default major changed; review PG18 metapackages manually')
     version=candidate['Version']
     if not re.fullmatch(re.escape(version)+r'(?:\+b[0-9]+)?', binary['Version']):
         raise RuntimeError('Source/binary versions disagree; review Kali metadata')
@@ -69,6 +73,7 @@ def discover(root):
     return {'upstream_version':version.rsplit('-',1)[0],'debian_version':version,
             'source_base_url':'https://http.kali.org/kali/'+candidate['Directory'].strip('/')+'/',
             'binary_version':binary['Version'],'official_binary_sha256':binary['SHA256'],
+            'metapackage_version':meta,
             'files':files,'dsc_sha256':next(value for name,value in sums.items() if name.endswith('.dsc'))}
 
 def pool_hashes(repo):
@@ -141,17 +146,28 @@ def main():
         if work.exists(): run(['git','-C',repo,'worktree','remove','--force',work])
         run(['git','-C',repo,'worktree','add','--detach',work,start],stdout=subprocess.DEVNULL)
         current_fingerprint=fingerprint(work)
-        changed=args.rebuild or official['debian_version']!=manifest['debian_version'] or official['files']!=manifest['files'] or official['binary_version']!=manifest.get('binary_version',manifest['debian_version']) or official['official_binary_sha256']!=manifest.get('official_binary_sha256') or current_fingerprint!=previous['recipe_fingerprint']
+        changed=args.rebuild or official['debian_version']!=manifest['debian_version'] or official['files']!=manifest['files'] or official['binary_version']!=manifest.get('binary_version',manifest['debian_version']) or official['metapackage_version']!=manifest['metapackage_version'] or official['official_binary_sha256']!=manifest.get('official_binary_sha256') or current_fingerprint!=previous['recipe_fingerprint']
         status.update(official_version=official['debian_version'],upstream_release=tag,update_available=bool(changed))
         if args.check or not changed:
             status['status']='update-available' if changed else 'up-to-date';save();print(json.dumps(status,indent=2));return
         if subprocess.run(['dpkg','--compare-versions',official['binary_version'],'lt',manifest.get('binary_version',manifest['debian_version'])]).returncode==0:
             raise RuntimeError('Refusing an upstream archive rollback')
         run(['git','-C',work,'merge','--no-edit',tag])
-        manifest.update(official,noipc_version=official['debian_version'])
-        meta=next(records(output(['chroot',root,'apt-cache','show','postgresql'])))['Version']
-        if not meta.startswith('18+'): raise RuntimeError('Kali default major changed; review PG18 metapackages manually')
+        revision=previous.get('noipc_revision',1)+1
+        manifest.update(official,noipc_revision=revision,
+                        noipc_version=official['debian_version']+f'+noipc{revision}')
+        keyring_version=datetime.now(timezone.utc).strftime('%Y.%m.%d.%H%M%S')
+        if subprocess.run(['dpkg','--compare-versions',keyring_version,'gt',previous['archive_keyring_version']]).returncode:
+            raise RuntimeError('Clock/version mismatch while advancing the archive build revision')
+        manifest['archive_keyring_version']=keyring_version
+        meta=official['metapackage_version']
         manifest['metapackage_version']=meta
+        versions=package_versions(manifest)
+        for candidate,previous_version in (
+                (versions['binary'],previous.get('noipc_binary_version',previous['binary_version'])),
+                (versions['meta'],previous.get('noipc_metapackage_version',previous['metapackage_version']))):
+            if subprocess.run(['dpkg','--compare-versions',candidate,'gt',previous_version]).returncode:
+                raise RuntimeError(f'Local package version must advance: {previous_version} -> {candidate}')
         (work/'noipc/packaging/manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
         artifacts=state/'artifacts'
         if artifacts.exists(): shutil.rmtree(artifacts)
@@ -160,19 +176,12 @@ def main():
         run(['bash',work/'noipc/packaging/build-debs.sh'],env=env)
         archive=state/'repository'
         if archive.exists(): shutil.rmtree(archive)
-        keyring_version=previous.get('archive_keyring_version','2026.10.29.3')
         def create_archive():
             run(['python3',work/'noipc/packaging/create-apt-repository.py','--packages',artifacts,
                  '--output',archive,'--signing-home',keys,'--metapackage-version',meta,
                  '--keyring-version',keyring_version])
         create_archive()
         bootstrap=archive/'postgresql-noipc-archive-keyring_all.deb'
-        if hashlib.sha256(bootstrap.read_bytes()).hexdigest()!=previous.get('archive_keyring_sha256'):
-            newer=datetime.now(timezone.utc).strftime('%Y.%m.%d.%H%M%S')
-            if subprocess.run(['dpkg','--compare-versions',newer,'gt',keyring_version]).returncode:
-                raise RuntimeError('Clock/version mismatch while advancing the auxiliary keyring package')
-            keyring_version=newer
-            create_archive()
         for test in ('test-apt-policy.py','test-install-guard.py','test-source-versions.py'):
             command=['python3',work/'noipc/packaging'/test]
             if test=='test-apt-policy.py': command.append(archive)
@@ -182,26 +191,42 @@ def main():
                 run(command,stdout=log,stderr=subprocess.STDOUT)
         with (work/'noipc/verification/apt-deb-audit.json').open('w') as log:
             run(['python3',work/'noipc/packaging/audit-debs.py',artifacts],stdout=log)
+        prior_root=state/'tests/testroot'
+        upgrade_result=None
+        if (prior_root/'.noipc-kali-rootfs').is_file():
+            run(['python3',work/'noipc/packaging/test-packages.py','--rootfs',root,
+                 '--repository',archive,'--state',state/'upgrade-tests','--upgrade-root',prior_root])
+            upgrade_result=json.loads((state/'upgrade-tests/result.json').read_text())
         run(['python3',work/'noipc/packaging/test-packages.py','--rootfs',root,'--repository',archive,'--state',state/'tests'])
+        with (work/'noipc/verification/apt-dist-upgrade.log').open('w') as log:
+            run(['python3',work/'noipc/packaging/test-dist-upgrade.py',archive,
+                 '--rootfs',state/'tests/testroot'],stdout=log,stderr=subprocess.STDOUT)
         tests=json.loads((state/'tests/result.json').read_text())
+        if upgrade_result: tests.update(installed_upgrade_checks=upgrade_result['installed_upgrade_checks'])
         for filename in ('apt-install.log','apt-systemd.log','core-integration.log'):
             text=(state/'tests'/filename).read_text()
             (work/'noipc/verification'/filename).write_text('\n'.join(
                 line for line in text.splitlines() if line.startswith(('PASS:','ALL ','All ')))+'\n')
         new={'debian_version':manifest['debian_version'],'binary_version':manifest['binary_version'],'metapackage_version':meta,
+             'noipc_revision':revision,'noipc_version':versions['source'],
+             'noipc_binary_version':versions['binary'],'noipc_metapackage_version':versions['meta'],
              'recipe_fingerprint':fingerprint(work),'upstream_tag':tag,
              'published_at':datetime.now(timezone.utc).isoformat(),'package_hashes':pool_hashes(archive),
              'archive_keyring_version':keyring_version,
              'archive_keyring_sha256':hashlib.sha256(bootstrap.read_bytes()).hexdigest()}
         (work/'noipc/packaging/published.json').write_text(json.dumps(new,indent=2)+'\n')
+        (work/'noipc/verification/package-revision-provenance.json').write_text(json.dumps(
+            {'kind':'full source build in Kali ARM64','source_version':versions['source'],
+             'binary_version':versions['binary'],'upstream_tag':tag},indent=2)+'\n')
         (work/'noipc/verification/latest-update.json').write_text(json.dumps(dict(new,tests=tests),indent=2)+'\n')
         run(['git','-C',work,'add','noipc/packaging/manifest.json','noipc/packaging/published.json',
              'noipc/verification/apt-deb-audit.json','noipc/verification/latest-update.json',
              'noipc/verification/apt-policy.log','noipc/verification/apt-install-guard.log',
              'noipc/verification/apt-install.log','noipc/verification/apt-systemd.log',
-             'noipc/verification/core-integration.log','noipc/verification/source-version-tests.log'])
+             'noipc/verification/core-integration.log','noipc/verification/source-version-tests.log',
+             'noipc/verification/apt-dist-upgrade.log','noipc/verification/package-revision-provenance.json'])
         run(['git','-C',work,'diff','--cached','--check'])
-        run(['git','-C',work,'commit','-m',f'Update NoIPC builds to official PostgreSQL {manifest["binary_version"]}'])
+        run(['git','-C',work,'commit','-m',f'Publish PostgreSQL NoIPC {versions["binary"]}'])
         status['apt_commit']=publish(work,archive,state,start,apt_ref)
         status['status']='published';save()
     except Exception as error:

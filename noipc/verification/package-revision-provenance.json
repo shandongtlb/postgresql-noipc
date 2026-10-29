@@ -1,0 +1,105 @@
+{
+  "kind": "packaging-only revision of the previously compiled and tested full-feature ARM64 payloads",
+  "source_version": "18.6-3+noipc2",
+  "binary_version": "18.6-3+noipc2",
+  "packages": [
+    {
+      "package": "libecpg-compat3",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 1,
+      "base_deb_sha256": "a8afff4285ff4bf717362deb065a6e1239ce069fab7b9bd5954bd800a6cdc141",
+      "deb_sha256": "5382b5a876f366c94f67d37c6f7f406d5873a22b731233f877a5232bdb0542cc"
+    },
+    {
+      "package": "libecpg-dev",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 1,
+      "base_deb_sha256": "a7f81a3f95d2285e0dad9ae3cdf14b7604fe694c0969d86da61329232f19fd24",
+      "deb_sha256": "e6ad529f12f02e875ec36eaa517ca99f2063405a1a52cbe9fd89de4d4169a96b"
+    },
+    {
+      "package": "libecpg6",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 1,
+      "base_deb_sha256": "df251e2db32abce60ed1fb19a97fb482ac223d56f61ec167f754e74f4cf4982e",
+      "deb_sha256": "13f0b4c56af3c61266c553507fe75c814bf72d17585ae5d502ccf48a955e809e"
+    },
+    {
+      "package": "libpgtypes3",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 1,
+      "base_deb_sha256": "7ca9398b0fa25fb95ddca91b1f9143e6edfded0689fd2efd4efb7036ae377817",
+      "deb_sha256": "db007cb8af6e684a05ef76998ee84ee76403d31d3b1a723d29f3e3c6e290f1d9"
+    },
+    {
+      "package": "libpq-dev",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 0,
+      "base_deb_sha256": "84a0f407f22853e57a0233a4d3827e66c23b3e419b584b60f0b017e2c9b15f76",
+      "deb_sha256": "644007795904d3b95890290193844e0fe0ed232cd3044de738dae3b92248a4ef"
+    },
+    {
+      "package": "libpq-oauth",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 1,
+      "base_deb_sha256": "271902d413c049824252a1b379e171eb3f43eff0ef2094f590d86cf5fcf25ba6",
+      "deb_sha256": "c4785d9df38b04249d7e1085f12d5036c25385f04a39bf727f16ac661248fcdb"
+    },
+    {
+      "package": "libpq5",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 1,
+      "base_deb_sha256": "b87c42ac7b5a44d59c9c4a5a42910a436d7d0d26cded01d6bfea6e6dfc984314",
+      "deb_sha256": "1e0f78cf6413b004cb64eb6111562eb4f1adb6cd9ab7c8f2fc52b4be38448efe"
+    },
+    {
+      "package": "postgresql-18-jit",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 1,
+      "base_deb_sha256": "a6af7edc1559f71cbf469dd6a98efcd30e1c838d8e6c50523f82cdb04f622e76",
+      "deb_sha256": "ae6522e1810eeeee3c9a9128be42b2c48339de39ce5d31198d656babe0c680bb"
+    },
+    {
+      "package": "postgresql-18",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 97,
+      "base_deb_sha256": "de75dff7eb2acd7e97a9616c3c7d39fe6c379d20780aa5afa87318d68b4c69c8",
+      "deb_sha256": "ac420e77f8ecd50fd19d8530d57957b6869cad24a6d632a5d8af33fcc281c88c"
+    },
+    {
+      "package": "postgresql-client-18",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 22,
+      "base_deb_sha256": "15a9d5e5f4fa7f1d4d09177736327e2f1055ab554e5e74eb903d97d049202b7e",
+      "deb_sha256": "27888178928265d045e99ab96a5813aa83b4bf7e8cca72ea0f2c4a78167fbb2e"
+    },
+    {
+      "package": "postgresql-plperl-18",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 4,
+      "base_deb_sha256": "6761aeb5d73bd9c0b912b1ed3a46150d9b3404eb8378a6875600e1beb1c5f81e",
+      "deb_sha256": "4bf03762418410449111381f8fc3130d37ff264fef23b9f8aaf47af9feed0324"
+    },
+    {
+      "package": "postgresql-plpython3-18",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 4,
+      "base_deb_sha256": "598f97b2db582c5d01a9a38be4c79c0b06f6dbde316b9aeb317248642e4439e0",
+      "deb_sha256": "7eb9cd2e39e89a2d4c0bec112280337584a80a1f4fd818db7678178d0d82c852"
+    },
+    {
+      "package": "postgresql-pltcl-18",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 1,
+      "base_deb_sha256": "94f1ba29d0a3dabe15ec2ae3d95208af8825eae2ebc3efcdf9dd1a67007e0daa",
+      "deb_sha256": "31be389305bc8579324fa66acb7bc2c3a18e4e56994ed62e8fb43f3e1ff3b37c"
+    },
+    {
+      "package": "postgresql-server-dev-18",
+      "version": "18.6-3+noipc2",
+      "elf_payloads_unchanged": 2,
+      "base_deb_sha256": "3076cd9364bb0d3ae23462b8640974dac2d9708d29ac38ab26e90712e28679db",
+      "deb_sha256": "8b2d89abe2c18b520da39752c333299dc9c71db0988324e08d8be0218382073d"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+PASS: apt dist-upgrade: stock-official-version: 18 archive packages selected with standard package revisions
+PASS: apt-get dist-upgrade: stock-official-version: 18 archive packages selected with standard package revisions
+PASS: apt dist-upgrade: previous-build: 18 archive packages selected with standard package revisions
+PASS: apt-get dist-upgrade: previous-build: 18 archive packages selected with standard package revisions
+PASS: apt dist-upgrade: keyring-already-upgraded: 17 archive packages selected with standard package revisions
+PASS: apt-get dist-upgrade: keyring-already-upgraded: 17 archive packages selected with standard package revisions
+PASS: apt dist-upgrade: legacy-metapackage-layout: 18 archive packages selected with standard package revisions
+PASS: apt-get dist-upgrade: legacy-metapackage-layout: 18 archive packages selected with standard package revisions
+PASS: apt dist-upgrade: up-to-date: 0 archive packages selected with standard package revisions
+PASS: apt-get dist-upgrade: up-to-date: 0 archive packages selected with standard package revisions
+All 10 real APT resolver checks passed; no fixture packages were installed.

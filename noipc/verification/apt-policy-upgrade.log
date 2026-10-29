@@ -1,9 +1,5 @@
-PostgreSQL 18.6 (Kali 18.6-3) on aarch64-unknown-linux-gnu, compiled by aarch64-linux-gnu-gcc (Debian 16.2.0-3) 16.2.0, 64-bit
-libpq5 18.6-3 yes
-postgresql 18+293 yes
-postgresql-18 18.6-3 yes
-postgresql-client 18+293 yes
-postgresql-client-18 18.6-3 yes
-'http://127.0.0.1:18765/pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-18_18.6-3_arm64.deb' postgresql-18_18.6-3_arm64.deb 6833292 SHA512:7ac12b0e86078e94af24968f9e6a6e77422829366d9b2aa2be2345469de5fb2b6739a97a7b670e718d429035d4238fd1027959e3401c923c3cdd020f57b35f10
-PASS: legacy +noipc installation migrated to exact official versions with one cluster and all committed rows preserved
-PASS: obsolete Deb822 source removed, same-version source order and marker guard installed
+PASS: plain apt update and dist-upgrade select the candidate server replacement
+PASS: ordinary ARM64 apt dist-upgrade installed the new build: 18.6-3 -> 18.6-3+noipc2
+PASS: upgrade restarted the official service and preserved 200000 rows, configuration and the single existing cluster
+All packages are up to date.
+PASS: another ordinary dist-upgrade does not reinstall the current PostgreSQL build

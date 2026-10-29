@@ -12,19 +12,23 @@ from pathlib import Path
 import shutil
 import subprocess
 import tempfile
+from versions import package_versions
 
 base = Path(__file__).resolve().parents[1]
 manifest = json.loads((base / 'packaging/manifest.json').read_text())
-if manifest['noipc_version'] != manifest['debian_version']:
-    raise SystemExit('PostgreSQL versions must exactly match the official Debian/Kali version')
+versions = package_versions(manifest)
 parser = argparse.ArgumentParser()
 parser.add_argument('--packages', type=Path, required=True)
 parser.add_argument('--output', type=Path, default=base / 'repository')
 parser.add_argument('--signing-home', type=Path, default=base / 'keys-private/apt')
 parser.add_argument('--base-url', default='https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt/')
-parser.add_argument('--keyring-version', default='2026.10.29.3')
+parser.add_argument('--keyring-version', default=manifest['archive_keyring_version'])
 parser.add_argument('--metapackage-version', default=manifest.get('metapackage_version', '18+293'))
 args = parser.parse_args()
+if args.metapackage_version != manifest['metapackage_version']:
+    raise SystemExit('Official metapackage version must match the build manifest')
+if args.keyring_version != manifest['archive_keyring_version']:
+    raise SystemExit('Archive configuration version must match the build manifest')
 repository = args.output.resolve()
 keyhome = args.signing_home.resolve()
 if keyhome == repository or keyhome.is_relative_to(repository):
@@ -67,8 +71,10 @@ provided = set()
 for package in packages:
     def field(name):
         return subprocess.check_output(['dpkg-deb', '-f', str(package), name], text=True).strip()
-    if field('PostgreSQL-NoIPC') != 'yes' or field('Version') != manifest.get('binary_version', manifest['debian_version']) or field('Architecture') not in ('arm64', 'all'):
+    if field('PostgreSQL-NoIPC') != 'yes' or field('Version') != versions['binary'] or field('Architecture') not in ('arm64', 'all'):
         raise SystemExit(f'Unexpected package version or architecture: {package.name}')
+    if f'postgresql-noipc-archive-keyring (>= {args.keyring_version})' not in field('Depends'):
+        raise SystemExit(f'Missing current archive dependency: {package.name}')
     provided.add(field('Package'))
 if not {'postgresql-18', 'postgresql-client-18'} <= provided:
     raise SystemExit('Both the NoIPC server and client packages are required')
@@ -82,7 +88,7 @@ for source in sorted(args.packages.resolve().iterdir()):
         install_immutable(source, target)
         active_pool_files.add(target)
 
-version = manifest.get('binary_version', manifest['debian_version'])
+version = versions['binary']
 # Exact binary names give the signed rebuild precedence over the fallback deny.
 # Source matching below covers future upstream majors without blocking extensions
 # or the separate postgresql-common service-management source package.
@@ -163,20 +169,24 @@ bootstrap = auxiliary_deb(
          'DPkg::Pre-Install-Pkgs {"/usr/lib/postgresql-noipc/verify-packages";};\n'
          'DPkg::Tools::Options::/usr/lib/postgresql-noipc/verify-packages::Version "1";\n',
      'etc/apt/preferences.d/postgresql-noipc': pin}, bootstrap_scripts)
-auxiliary_deb('postgresql', args.metapackage_version,
+auxiliary_deb('postgresql', versions['meta'],
               'PostgreSQL database server with the NoIPC kernel compatibility patch',
               f'postgresql-18 (>= {version}), '
-              f'postgresql-noipc-archive-keyring (>= {args.keyring_version})', {})
-auxiliary_deb('postgresql-client', args.metapackage_version,
+              f'postgresql-noipc-archive-keyring (>= {args.keyring_version})',
+              {})
+auxiliary_deb('postgresql-client', versions['meta'],
               'front-end programs for the PostgreSQL NoIPC rebuild',
               f'postgresql-client-18 (>= {version}), '
-              f'postgresql-noipc-archive-keyring (>= {args.keyring_version})', {})
+              f'postgresql-noipc-archive-keyring (>= {args.keyring_version})',
+              {})
 # Keep the compatibility alias pointing at the same standard packages.
 auxiliary_deb('postgresql-noipc', version,
               'PostgreSQL 18 rebuilt for Linux kernels without SysV IPC',
-              f'postgresql-18 (>= {version}), postgresql-client-18 (>= {version})', {})
+              f'postgresql-18 (>= {version}), postgresql-client-18 (>= {version}), '
+              f'postgresql-noipc-archive-keyring (>= {args.keyring_version})',
+              {})
 shutil.copy2(bootstrap, repository / 'postgresql-noipc-archive-keyring_all.deb')
-# Keep only this release; content-addressed paths distinguish same-version rebuilds.
+# Keep only this release; every package revision has a content-addressed path.
 for path in sorted((repository / 'pool').rglob('*'), reverse=True):
     if path.is_file() and path not in active_pool_files:
         path.unlink()
@@ -225,8 +235,9 @@ readme = f'''# PostgreSQL NoIPC APT archive
 Packages are rebuilt from Debian/Kali postgresql-18 {manifest['debian_version']} with the NoIPC patch.
 This branch is a signed static APT archive for **Kali rolling arm64**.
 Only the current release is retained. This branch is published as a single Git
-snapshot; the source branch retains upstream history. Package versions match the distribution. Same-version rebuilds use new content-addressed
-download paths and require an explicit reinstall; new official versions upgrade normally.
+snapshot; the source branch retains upstream history. PostgreSQL keeps the official
+upstream version and standard package names. Debian package versions add +noipcN;
+each rebuild advances N so ordinary apt update && apt dist-upgrade installs updates.
 
 Inside the phone's Kali chroot, as root:
 
@@ -234,7 +245,8 @@ Inside the phone's Kali chroot, as root:
 curl -fLO {args.base_url.rstrip('/')}/postgresql-noipc-archive-keyring_all.deb
 apt install ./postgresql-noipc-archive-keyring_all.deb
 apt update
-postgresql-noipc-upgrade -y
+apt dist-upgrade
+apt install postgresql postgresql-client
 systemctl enable --now postgresql
 systemctl status postgresql@18-main --no-pager
 pg_lsclusters
@@ -243,12 +255,13 @@ pg_lsclusters
 The standard `postgresql` and `postgresql-client` metapackages select the NoIPC 18 packages.
 `postgresql-18` and all versioned binary package names also match the distribution names.
 `postgresql-noipc` remains available as a compatibility alias; it uses the same server package.
-Package versions match Kali exactly. The managed first source and pre-install marker guard
-ensure same-version stock packages cannot replace this build. Other stock core versions are
-pinned to -1. Use `postgresql-noipc-upgrade` for initial migration and same-version rebuilds. Shared `postgresql-common` infrastructure and
+Debian package revisions are newer than the corresponding Kali packages. The managed first source and pre-install marker guard
+ensure unmarked stock packages cannot replace this build. Other stock core versions are
+pinned to -1. Use `apt update && apt dist-upgrade` for stock-package migration and all updates. Shared `postgresql-common` infrastructure and
 independently packaged extensions remain available from Kali. Existing clusters are not deleted.
 To update an installation bootstrapped with version 2026.10.29.1, run
-`apt update && apt install postgresql-noipc-archive-keyring && postgresql-noipc-upgrade -y`.
+`apt update && apt dist-upgrade`. Historical +noipc trial versions also migrate this way;
+when using -y for that one-time downgrade, add --allow-downgrades.
 Official `postgresql-common` provides cluster management, systemd/SysV service files, logging,
 and upgrade scripts. The target NetHunter chroot runs systemd, so enabling the service starts
 the database whenever that chroot's systemd boots. Other chroots without init can use `service`.

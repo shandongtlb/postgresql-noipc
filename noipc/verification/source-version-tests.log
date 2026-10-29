@@ -1,2 +1,5 @@
-PASS: the generated .dsc keeps the exact official source version
-PASS: binary-only +bN builds keep the official binary version and original Source version
+PASS: the generated .dsc uses the local +noipcN source revision
+PASS: official binary-only +bN is retained after the local revision and references its correct Source version
+PASS: real dpkg-gencontrol emits the build-specific archive dependency
+PASS: another rebuild advances binary and metapackage versions under real dpkg ordering
+PASS: a new upstream release advances binary and metapackage versions under real dpkg ordering

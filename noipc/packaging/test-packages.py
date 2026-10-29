@@ -17,34 +17,41 @@ parser=argparse.ArgumentParser()
 parser.add_argument('--rootfs',type=Path,required=True)
 parser.add_argument('--repository',type=Path,required=True)
 parser.add_argument('--state',type=Path,required=True)
+parser.add_argument('--upgrade-root',type=Path,help='upgrade an existing marked disposable test root without resetting it')
+parser.add_argument('--machine',default='postgresql-noipc-ci')
 args=parser.parse_args()
 base=Path(__file__).resolve().parents[1]
 state=args.state.resolve();state.mkdir(parents=True,exist_ok=True)
-root=state/'testroot';machine='postgresql-noipc-ci'
+root=args.upgrade_root.resolve() if args.upgrade_root else state/'testroot'
+machine=args.machine
 if not (args.rootfs/'.noipc-kali-rootfs').is_file(): raise SystemExit('Unmarked build root')
 if subprocess.run(['machinectl','show',machine],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0:
     raise SystemExit('The test machine is already running')
-if root.exists():
-    if not (root/'.noipc-kali-rootfs').is_file(): raise SystemExit('Unmarked test root')
-    shutil.rmtree(root)
-root.mkdir()
-subprocess.run(['rsync','-a','--exclude=/build','--exclude=/proc/*','--exclude=/sys/*',
-                '--exclude=/run/*',str(args.rootfs.resolve())+'/',str(root)+'/'],check=True)
-# The minbase package-build root intentionally has no init or curl. Install
-# test infrastructure while the build-only policy still prevents daemon starts.
-with (state/'bootstrap-test-root.log').open('w') as log:
-    subprocess.run(['mount','-t','proc','proc',str(root/'proc')],check=True)
-    try:
-        subprocess.run(['chroot',str(root),'/usr/bin/env','DEBIAN_FRONTEND=noninteractive',
-                        'apt-get','-o','APT::Update::Error-Mode=any','update'],
-                       stdout=log,stderr=subprocess.STDOUT,check=True,timeout=600)
-        subprocess.run(['chroot',str(root),'/usr/bin/env','DEBIAN_FRONTEND=noninteractive',
-                        'apt-get','-y','--no-install-recommends','install',
-                        'systemd','systemd-sysv','dbus','curl','ssl-cert'],
-                       stdout=log,stderr=subprocess.STDOUT,check=True,timeout=1800)
-    finally:
-        subprocess.run(['umount',str(root/'proc')],check=True)
-(root/'usr/sbin/policy-rc.d').unlink(missing_ok=True)
+if args.upgrade_root:
+    if not (root/'.noipc-kali-rootfs').is_file() or (root/'usr/sbin/policy-rc.d').exists():
+        raise SystemExit('An installed marked disposable test root without policy-rc.d is required')
+else:
+    if root.exists():
+        if not (root/'.noipc-kali-rootfs').is_file(): raise SystemExit('Unmarked test root')
+        shutil.rmtree(root)
+    root.mkdir()
+    subprocess.run(['rsync','-a','--exclude=/build','--exclude=/proc/*','--exclude=/sys/*',
+                    '--exclude=/run/*',str(args.rootfs.resolve())+'/',str(root)+'/'],check=True)
+    # The minbase package-build root intentionally has no init or curl. Install
+    # test infrastructure while the build-only policy still prevents daemon starts.
+    with (state/'bootstrap-test-root.log').open('w') as log:
+        subprocess.run(['mount','-t','proc','proc',str(root/'proc')],check=True)
+        try:
+            subprocess.run(['chroot',str(root),'/usr/bin/env','DEBIAN_FRONTEND=noninteractive',
+                            'apt-get','-o','APT::Update::Error-Mode=any','update'],
+                           stdout=log,stderr=subprocess.STDOUT,check=True,timeout=600)
+            subprocess.run(['chroot',str(root),'/usr/bin/env','DEBIAN_FRONTEND=noninteractive',
+                            'apt-get','-o','APT::Keep-Downloaded-Packages=true','-y','--no-install-recommends','install',
+                            'systemd','systemd-sysv','dbus','curl','ssl-cert','libpq5'],
+                           stdout=log,stderr=subprocess.STDOUT,check=True,timeout=1800)
+        finally:
+            subprocess.run(['umount',str(root/'proc')],check=True)
+    (root/'usr/sbin/policy-rc.d').unlink(missing_ok=True)
 # Only infrastructure credentials are overridden for QEMU. PG units are untouched.
 if platform.machine()=='x86_64':
     for unit in ('systemd-journald','systemd-sysusers','systemd-tmpfiles-dev-early',
@@ -123,16 +130,22 @@ def stopped(signum, frame):
 signal.signal(signal.SIGTERM, stopped)
 
 try:
-    boot('boot-install.log')
-    suite('test-apt-install.sh','apt-install.log',12)
-    suite('test-core.sh','core-integration.log',13)
-    control('enable','postgresql')
-    stop()
-    boot('boot-restart.log')
-    suite('test-systemd.sh','apt-systemd.log',4)
-    result={'apt_checks':12,'core_crash_lock_checks':13,'systemd_ipc_checks':4,'postgresql_arch':'arm64',
-            'controller_arch':platform.machine(),'sysv_ipc':'all 12 syscalls return ENOSYS',
-            'physical_phone_tested':False}
+    if args.upgrade_root:
+        boot('boot-upgrade.log')
+        suite('test-dist-upgrade-installed.sh','apt-dist-upgrade-installed.log',4)
+        result={'installed_upgrade_checks':4,'postgresql_arch':'arm64',
+                'controller_arch':platform.machine(),'physical_phone_tested':False}
+    else:
+        boot('boot-install.log')
+        suite('test-apt-install.sh','apt-install.log',13)
+        suite('test-core.sh','core-integration.log',13)
+        control('enable','postgresql')
+        stop()
+        boot('boot-restart.log')
+        suite('test-systemd.sh','apt-systemd.log',4)
+        result={'apt_checks':13,'core_crash_lock_checks':13,'systemd_ipc_checks':4,'postgresql_arch':'arm64',
+                'controller_arch':platform.machine(),'sysv_ipc':'all 12 syscalls return ENOSYS',
+                'physical_phone_tested':False}
     (state/'result.json').write_text(json.dumps(result,indent=2)+'\n')
 finally:
     stop();http.shutdown();http.server_close()
