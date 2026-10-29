@@ -1,0 +1,528 @@
+[
+  {
+    "file": "bin/clusterdb",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/createdb",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/createuser",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/dropdb",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/dropuser",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/ecpg",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/initdb",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_amcheck",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_archivecleanup",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_basebackup",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_checksums",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_combinebackup",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_config",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_controldata",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_createsubscriber",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libm.so.6",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_ctl",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_dump",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_dumpall",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_isready",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_receivewal",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_recvlogical",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_resetwal",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_restore",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_rewind",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_test_fsync",
+    "max_glibc": "2.34",
+    "needed": [
+      "libm.so.6",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_test_timing",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_upgrade",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_verifybackup",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_waldump",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pg_walsummary",
+    "max_glibc": "2.34",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/pgbench",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libm.so.6",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/postgres",
+    "max_glibc": "2.34",
+    "needed": [
+      "libm.so.6",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/psql",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libm.so.6",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/reindexdb",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "bin/vacuumdb",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/cyrillic_and_mic.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/dict_snowball.so",
+    "max_glibc": "2.17",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/euc2004_sjis2004.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/euc_cn_and_mic.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/euc_jp_and_sjis.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/euc_kr_and_mic.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/euc_tw_and_big5.so",
+    "max_glibc": "2.17",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/latin2_and_win1250.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/latin_and_mic.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/libecpg.so.6.18",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpgtypes.so.3",
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/libecpg_compat.so.3.18",
+    "max_glibc": "2.17",
+    "needed": [
+      "libecpg.so.6",
+      "libpgtypes.so.3",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/libpgtypes.so.3.18",
+    "max_glibc": "2.17",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/libpq.so.5.18",
+    "max_glibc": "2.33",
+    "needed": [
+      "libm.so.6",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/libpqwalreceiver.so",
+    "max_glibc": "2.17",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/pgoutput.so",
+    "max_glibc": "2.17",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/pgxs/src/test/isolation/isolationtester",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/pgxs/src/test/isolation/pg_isolation_regress",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/pgxs/src/test/regress/pg_regress",
+    "max_glibc": "2.34",
+    "needed": [
+      "libpq.so.5",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/plpgsql.so",
+    "max_glibc": "2.17",
+    "needed": [
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ]
+  },
+  {
+    "file": "lib/utf8_and_big5.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_cyrillic.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_euc2004.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_euc_cn.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_euc_jp.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_euc_kr.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_euc_tw.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_gb18030.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_gbk.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_iso8859.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_iso8859_1.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_johab.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_sjis.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_sjis2004.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_uhc.so",
+    "max_glibc": null,
+    "needed": []
+  },
+  {
+    "file": "lib/utf8_and_win.so",
+    "max_glibc": null,
+    "needed": []
+  }
+]

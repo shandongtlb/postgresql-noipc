@@ -1,0 +1,14 @@
+PASS: initdb/startup with SysV shared memory and semaphores disabled
+PASS: second server rejected by directory lock
+PASS: directory remains protected when postmaster.pid is removed
+PASS: SQL create/insert/read and checksums
+PASS: parallel query launches 2 workers using mmap dynamic shared memory
+PASS: 100 concurrent pgbench transactions, zero failures
+PASS: pg_dump/pg_restore round trip
+PASS: backend SIGKILL recovery retains directory lock and committed data
+PASS: orphan backend retains lock after postmaster SIGKILL
+PASS: restart after all orphan processes exit; WAL crash recovery preserves data
+PASS: single-user mode cannot bypass running server interlock
+PASS: 3 clean stop/start cycles preserve committed data
+PASS: standalone single-user access succeeds after shutdown
+ALL 13 integration checks passed

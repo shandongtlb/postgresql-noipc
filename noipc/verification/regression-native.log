@@ -1,0 +1,290 @@
+make -C ./src/backend generated-headers
+make[1]: Entering directory '/opt/postgresql-no-sysvipc/build/native/src/backend'
+make -C ../include/catalog generated-headers
+make[2]: Entering directory '/opt/postgresql-no-sysvipc/build/native/src/include/catalog'
+make[2]: Nothing to be done for 'generated-headers'.
+make[2]: Leaving directory '/opt/postgresql-no-sysvipc/build/native/src/include/catalog'
+make -C nodes generated-header-symlinks
+make[2]: Entering directory '/opt/postgresql-no-sysvipc/build/native/src/backend/nodes'
+make[2]: Nothing to be done for 'generated-header-symlinks'.
+make[2]: Leaving directory '/opt/postgresql-no-sysvipc/build/native/src/backend/nodes'
+make -C utils generated-header-symlinks
+make[2]: Entering directory '/opt/postgresql-no-sysvipc/build/native/src/backend/utils'
+make -C adt jsonpath_gram.h
+make[3]: Entering directory '/opt/postgresql-no-sysvipc/build/native/src/backend/utils/adt'
+make[3]: 'jsonpath_gram.h' is up to date.
+make[3]: Leaving directory '/opt/postgresql-no-sysvipc/build/native/src/backend/utils/adt'
+make[2]: Leaving directory '/opt/postgresql-no-sysvipc/build/native/src/backend/utils'
+make[1]: Leaving directory '/opt/postgresql-no-sysvipc/build/native/src/backend'
+rm -rf '/opt/postgresql-no-sysvipc/build/native'/tmp_install
+/bin/sh /opt/postgresql-no-sysvipc/build/native/../../src/postgresql-18.6/config/install-sh -c -d '/opt/postgresql-no-sysvipc/build/native'/tmp_install/log
+make -C '.' DESTDIR='/opt/postgresql-no-sysvipc/build/native'/tmp_install install >'/opt/postgresql-no-sysvipc/build/native'/tmp_install/log/install.log 2>&1
+make -j1 -C src/test/regress checkprep >>'/opt/postgresql-no-sysvipc/build/native'/tmp_install/log/install.log 2>&1
+PATH="/opt/postgresql-no-sysvipc/build/native/tmp_install/opt/postgresql-no-sysvipc/install-native/bin:/opt/postgresql-no-sysvipc/build/native:$PATH" LD_LIBRARY_PATH="/opt/postgresql-no-sysvipc/build/native/tmp_install/opt/postgresql-no-sysvipc/install-native/lib" INITDB_TEMPLATE='/opt/postgresql-no-sysvipc/build/native'/tmp_install/initdb-template  initdb --auth trust --no-sync --no-instructions --lc-messages=C --no-clean '/opt/postgresql-no-sysvipc/build/native'/tmp_install/initdb-template >>'/opt/postgresql-no-sysvipc/build/native'/tmp_install/log/initdb-template.log 2>&1
+make -C src/test/regress check
+make[1]: Entering directory '/opt/postgresql-no-sysvipc/build/native/src/test/regress'
+make -C ../../../src/port all
+make[2]: Entering directory '/opt/postgresql-no-sysvipc/build/native/src/port'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/opt/postgresql-no-sysvipc/build/native/src/port'
+make -C ../../../src/common all
+make[2]: Entering directory '/opt/postgresql-no-sysvipc/build/native/src/common'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/opt/postgresql-no-sysvipc/build/native/src/common'
+echo "# +++ regress check in src/test/regress +++" && PATH="/opt/postgresql-no-sysvipc/build/native/tmp_install/opt/postgresql-no-sysvipc/install-native/bin:/opt/postgresql-no-sysvipc/build/native/src/test/regress:$PATH" LD_LIBRARY_PATH="/opt/postgresql-no-sysvipc/build/native/tmp_install/opt/postgresql-no-sysvipc/install-native/lib" INITDB_TEMPLATE='/opt/postgresql-no-sysvipc/build/native'/tmp_install/initdb-template  ../../../src/test/regress/pg_regress --temp-instance=./tmp_check --inputdir=/opt/postgresql-no-sysvipc/build/native/../../src/postgresql-18.6/src/test/regress --bindir=     --dlpath=. --max-concurrent-tests=20  --schedule=/opt/postgresql-no-sysvipc/build/native/../../src/postgresql-18.6/src/test/regress/parallel_schedule  
+# +++ regress check in src/test/regress +++
+# initializing database system by copying initdb template
+# using temp instance on port 65318 with PID 31139
+ok 1         - test_setup                                169 ms
+# parallel group (20 tests):  name char varchar pg_lsn text int2 int4 txid oid boolean money regproc float4 int8 bit float8 enum uuid numeric rangetypes
+ok 2         + boolean                                    57 ms
+ok 3         + char                                       37 ms
+ok 4         + name                                       27 ms
+ok 5         + varchar                                    37 ms
+ok 6         + text                                       42 ms
+ok 7         + int2                                       41 ms
+ok 8         + int4                                       41 ms
+ok 9         + int8                                       68 ms
+ok 10        + oid                                        42 ms
+ok 11        + float4                                     62 ms
+ok 12        + float8                                     71 ms
+ok 13        + bit                                        69 ms
+ok 14        + numeric                                   225 ms
+ok 15        + txid                                       38 ms
+ok 16        + uuid                                      117 ms
+ok 17        + enum                                       75 ms
+ok 18        + money                                      48 ms
+ok 19        + rangetypes                                245 ms
+ok 20        + pg_lsn                                     29 ms
+ok 21        + regproc                                    52 ms
+# parallel group (20 tests):  md5 circle lseg line time path macaddr timetz point date numerology macaddr8 interval inet strings polygon box multirangetypes timestamp timestamptz
+ok 22        + strings                                   124 ms
+ok 23        + md5                                        25 ms
+ok 24        + numerology                                 58 ms
+ok 25        + point                                      55 ms
+ok 26        + lseg                                       34 ms
+ok 27        + line                                       34 ms
+ok 28        + box                                       146 ms
+ok 29        + path                                       39 ms
+ok 30        + polygon                                   133 ms
+ok 31        + circle                                     25 ms
+ok 32        + date                                       57 ms
+ok 33        + time                                       37 ms
+ok 34        + timetz                                     47 ms
+ok 35        + timestamp                                 346 ms
+ok 36        + timestamptz                               382 ms
+ok 37        + interval                                   68 ms
+ok 38        + inet                                       77 ms
+ok 39        + macaddr                                    42 ms
+ok 40        + macaddr8                                   53 ms
+ok 41        + multirangetypes                           157 ms
+# parallel group (16 tests):  comments euc_kr unicode misc_sanity xid tstypes expressions encoding type_sanity mvcc geometry horology stats_import opr_sanity database regex
+ok 42        + geometry                                   93 ms
+ok 43        + horology                                  104 ms
+ok 44        + tstypes                                    55 ms
+ok 45        + regex                                     302 ms
+ok 46        + type_sanity                                74 ms
+ok 47        + opr_sanity                                217 ms
+ok 48        + misc_sanity                                32 ms
+ok 49        + comments                                   18 ms
+ok 50        + expressions                                70 ms
+ok 51        + unicode                                    25 ms
+ok 52        + xid                                        48 ms
+ok 53        + mvcc                                       79 ms
+ok 54        + database                                  215 ms
+ok 55        + stats_import                              119 ms
+ok 56        + encoding                                   66 ms
+ok 57        + euc_kr                                     15 ms
+# parallel group (6 tests):  copyencoding copyselect copydml copy insert_conflict insert
+ok 58        + copy                                       69 ms
+ok 59        + copyselect                                 19 ms
+ok 60        + copydml                                    26 ms
+ok 61        + copyencoding                               11 ms
+ok 62        + insert                                    215 ms
+ok 63        + insert_conflict                           100 ms
+# parallel group (7 tests):  create_function_c create_operator create_type create_schema create_misc create_procedure create_table
+ok 64        + create_function_c                          10 ms
+ok 65        + create_misc                                37 ms
+ok 66        + create_operator                            21 ms
+ok 67        + create_procedure                           47 ms
+ok 68        + create_table                              242 ms
+ok 69        + create_type                                24 ms
+ok 70        + create_schema                              30 ms
+# parallel group (5 tests):  index_including index_including_gist create_view create_index_spgist create_index
+ok 71        + create_index                              471 ms
+ok 72        + create_index_spgist                       256 ms
+ok 73        + create_view                               168 ms
+ok 74        + index_including                            97 ms
+ok 75        + index_including_gist                      150 ms
+# parallel group (16 tests):  create_aggregate create_cast errors roleattributes hash_func select drop_if_exists typed_table create_am create_function_sql infinite_recurse vacuum updatable_views constraints triggers inherit
+ok 76        + create_aggregate                           39 ms
+ok 77        + create_function_sql                       128 ms
+ok 78        + create_cast                                42 ms
+ok 79        + constraints                               408 ms
+ok 80        + triggers                                  565 ms
+ok 81        + select                                     75 ms
+ok 82        + inherit                                   599 ms
+ok 83        + typed_table                               110 ms
+ok 84        + vacuum                                    287 ms
+ok 85        + drop_if_exists                             78 ms
+ok 86        + updatable_views                           390 ms
+ok 87        + roleattributes                             40 ms
+ok 88        + create_am                                 116 ms
+ok 89        + hash_func                                  48 ms
+ok 90        + errors                                     38 ms
+ok 91        + infinite_recurse                          158 ms
+ok 92        - sanity_check                               74 ms
+# parallel group (20 tests):  select_having delete select_distinct_on case select_implicit random namespace select_into prepared_xacts select_distinct portals transactions union arrays subselect update hash_index join aggregates btree_index
+ok 93        + select_into                               111 ms
+ok 94        + select_distinct                           161 ms
+ok 95        + select_distinct_on                         71 ms
+ok 96        + select_implicit                            78 ms
+ok 97        + select_having                              42 ms
+ok 98        + subselect                                 258 ms
+ok 99        + union                                     194 ms
+ok 100       + case                                       71 ms
+ok 101       + join                                      474 ms
+ok 102       + aggregates                                489 ms
+ok 103       + transactions                              173 ms
+ok 104       + random                                     92 ms
+ok 105       + portals                                   168 ms
+ok 106       + arrays                                    255 ms
+ok 107       + btree_index                               761 ms
+ok 108       + hash_index                                411 ms
+ok 109       + update                                    349 ms
+ok 110       + delete                                     42 ms
+ok 111       + namespace                                 100 ms
+ok 112       + prepared_xacts                            105 ms
+# parallel group (20 tests):  init_privs drop_operator security_label tablesample lock object_address password collate replica_identity groupingsets identity matview spgist gist generated_stored rowsecurity gin join_hash brin privileges
+ok 113       + brin                                     1051 ms
+ok 114       + gin                                       633 ms
+ok 115       + gist                                      606 ms
+ok 116       + spgist                                    562 ms
+ok 117       + privileges                               1244 ms
+ok 118       + init_privs                                 25 ms
+ok 119       + security_label                             80 ms
+ok 120       + collate                                   229 ms
+ok 121       + matview                                   497 ms
+ok 122       + lock                                      129 ms
+ok 123       + replica_identity                          253 ms
+ok 124       + rowsecurity                               622 ms
+ok 125       + object_address                            169 ms
+ok 126       + tablesample                                92 ms
+ok 127       + groupingsets                              306 ms
+ok 128       + drop_operator                              20 ms
+ok 129       + password                                  177 ms
+ok 130       + identity                                  481 ms
+ok 131       + generated_stored                          603 ms
+ok 132       + join_hash                                1025 ms
+# parallel group (2 tests):  brin_bloom brin_multi
+ok 133       + brin_bloom                                 55 ms
+ok 134       + brin_multi                                156 ms
+# parallel group (19 tests):  async collate.icu.utf8 dbsize collate.utf8 tidrangescan tidscan tid alter_operator tsrf sysviews misc_functions create_role misc incremental_sort alter_generic merge create_table_like generated_virtual without_overlaps
+ok 135       + create_table_like                         349 ms
+ok 136       + alter_generic                             141 ms
+ok 137       + alter_operator                             71 ms
+ok 138       + misc                                      127 ms
+ok 139       + async                                      25 ms
+ok 140       + dbsize                                     34 ms
+ok 141       + merge                                     263 ms
+ok 142       + misc_functions                            104 ms
+ok 143       + sysviews                                   99 ms
+ok 144       + tsrf                                       75 ms
+ok 145       + tid                                        66 ms
+ok 146       + tidscan                                    57 ms
+ok 147       + tidrangescan                               51 ms
+ok 148       + collate.utf8                               50 ms
+ok 149       + collate.icu.utf8                           25 ms
+ok 150       + incremental_sort                          135 ms
+ok 151       + create_role                               108 ms
+ok 152       + without_overlaps                          554 ms
+ok 153       + generated_virtual                         429 ms
+# parallel group (8 tests):  collate.linux.utf8 collate.windows.win1252 amutils psql_crosstab psql_pipeline psql rules stats_ext
+ok 154       + rules                                     365 ms
+ok 155       + psql                                      336 ms
+ok 156       + psql_crosstab                              41 ms
+ok 157       + psql_pipeline                              68 ms
+ok 158       + amutils                                    23 ms
+ok 159       + stats_ext                                1043 ms
+ok 160       + collate.linux.utf8                         13 ms
+ok 161       + collate.windows.win1252                    13 ms
+ok 162       - select_parallel                          1030 ms
+ok 163       - write_parallel                            117 ms
+ok 164       - vacuum_parallel                            65 ms
+ok 165       - maintain_every                             14 ms
+# parallel group (2 tests):  subscription publication
+ok 166       + publication                               284 ms
+ok 167       + subscription                               48 ms
+# parallel group (17 tests):  portals_p2 advisory_lock xmlmap combocid tsdicts guc functional_deps dependency equivclass select_views window bitmapops cluster indirect_toast tsearch foreign_data foreign_key
+ok 168       + select_views                              143 ms
+ok 169       + portals_p2                                 37 ms
+ok 170       + foreign_key                               811 ms
+ok 171       + cluster                                   322 ms
+ok 172       + dependency                                110 ms
+ok 173       + guc                                       103 ms
+ok 174       + bitmapops                                 311 ms
+ok 175       + combocid                                   69 ms
+ok 176       + tsearch                                   347 ms
+ok 177       + tsdicts                                    83 ms
+ok 178       + foreign_data                              489 ms
+ok 179       + window                                    181 ms
+ok 180       + xmlmap                                     62 ms
+ok 181       + functional_deps                            97 ms
+ok 182       + advisory_lock                              39 ms
+ok 183       + indirect_toast                            319 ms
+ok 184       + equivclass                                105 ms
+# parallel group (9 tests):  json_encoding jsonpath_encoding jsonpath sqljson sqljson_queryfuncs sqljson_jsontable json jsonb_jsonpath jsonb
+ok 185       + json                                      210 ms
+ok 186       + jsonb                                     363 ms
+ok 187       + json_encoding                              24 ms
+ok 188       + jsonpath                                   40 ms
+ok 189       + jsonpath_encoding                          35 ms
+ok 190       + jsonb_jsonpath                            230 ms
+ok 191       + sqljson                                    92 ms
+ok 192       + sqljson_queryfuncs                        102 ms
+ok 193       + sqljson_jsontable                         138 ms
+# parallel group (18 tests):  xml prepare limit conversion plancache returning copy2 rowtypes polymorphism sequence temp largeobject truncate rangefuncs with domain plpgsql alter_table
+ok 194       + plancache                                 191 ms
+ok 195       + limit                                     111 ms
+ok 196       + plpgsql                                   564 ms
+ok 197       + copy2                                     305 ms
+ok 198       + temp                                      354 ms
+ok 199       + domain                                    403 ms
+ok 200       + rangefuncs                                373 ms
+ok 201       + prepare                                    56 ms
+ok 202       + conversion                                176 ms
+ok 203       + truncate                                  362 ms
+ok 204       + alter_table                              1095 ms
+ok 205       + sequence                                  328 ms
+ok 206       + polymorphism                              310 ms
+ok 207       + rowtypes                                  303 ms
+ok 208       + returning                                 227 ms
+ok 209       + largeobject                               348 ms
+ok 210       + with                                      372 ms
+ok 211       + xml                                        22 ms
+# parallel group (13 tests):  numa predicate hash_part reloptions partition_info explain memoize partition_aggregate tuplesort partition_prune partition_join stats indexing
+ok 212       + partition_join                            970 ms
+ok 213       + partition_prune                           963 ms
+ok 214       + reloptions                                102 ms
+ok 215       + hash_part                                  70 ms
+ok 216       + indexing                                 1046 ms
+ok 217       + partition_aggregate                       642 ms
+ok 218       + partition_info                            112 ms
+ok 219       + tuplesort                                 813 ms
+ok 220       + explain                                   129 ms
+ok 221       + memoize                                   236 ms
+ok 222       + stats                                     977 ms
+ok 223       + predicate                                  49 ms
+ok 224       + numa                                       17 ms
+# parallel group (2 tests):  compression_pglz compression
+ok 225       + compression                                78 ms
+ok 226       + compression_pglz                           15 ms
+# parallel group (2 tests):  oidjoins event_trigger
+ok 227       + oidjoins                                  154 ms
+ok 228       + event_trigger                             169 ms
+ok 229       - event_trigger_login                        22 ms
+ok 230       - fast_default                              121 ms
+ok 231       - tablespace                                218 ms
+1..231
+# All 231 tests passed.
+make[1]: Leaving directory '/opt/postgresql-no-sysvipc/build/native/src/test/regress'

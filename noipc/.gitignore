@@ -1,0 +1,13 @@
+/artifacts/
+/build/
+/downloads/
+/install/
+/logs/
+/stage-arm64/
+/toolchain/sysroot/
+/tests/deny-sysvipc
+/tests/run-*/
+/tests/wrapper-*/
+/tests/package-extract/
+__pycache__/
+*.pyc
