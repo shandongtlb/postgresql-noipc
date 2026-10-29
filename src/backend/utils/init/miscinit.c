@@ -1514,6 +1514,7 @@ CreateLockFile(const char *filename, bool amPostmaster,
 void
 CreateDataDirLockFile(bool amPostmaster)
 {
+	PGSharedMemoryLock();
 	CreateLockFile(DIRECTORY_LOCK_FILE, amPostmaster, "", true, DataDir);
 }
 

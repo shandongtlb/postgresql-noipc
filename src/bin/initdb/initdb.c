@@ -1075,38 +1075,7 @@ set_null_conf(void)
 static const char *
 choose_dsm_implementation(void)
 {
-#if defined(HAVE_SHM_OPEN) && !defined(__sun__)
-	int			ntries = 10;
-	pg_prng_state prng_state;
-
-	/* Initialize prng; this function is its only user in this program. */
-	pg_prng_seed(&prng_state, (uint64) (getpid() ^ time(NULL)));
-
-	while (ntries > 0)
-	{
-		uint32		handle;
-		char		name[64];
-		int			fd;
-
-		handle = pg_prng_uint32(&prng_state);
-		snprintf(name, 64, "/PostgreSQL.%u", handle);
-		if ((fd = shm_open(name, O_CREAT | O_RDWR | O_EXCL, 0600)) != -1)
-		{
-			close(fd);
-			shm_unlink(name);
-			return "posix";
-		}
-		if (errno != EEXIST)
-			break;
-		--ntries;
-	}
-#endif
-
-#ifdef WIN32
-	return "windows";
-#else
-	return "sysv";
-#endif
+	return "mmap";
 }
 
 /*

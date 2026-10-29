@@ -88,6 +88,7 @@ extern void PGSharedMemoryNoReAttach(void);
 extern PGShmemHeader *PGSharedMemoryCreate(Size size,
 										   PGShmemHeader **shim);
 extern bool PGSharedMemoryIsInUse(unsigned long id1, unsigned long id2);
+extern void PGSharedMemoryLock(void);
 extern void PGSharedMemoryDetach(void);
 extern void GetHugePageSize(Size *hugepagesize, int *mmap_flags);
 
