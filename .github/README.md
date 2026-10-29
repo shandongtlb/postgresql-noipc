@@ -13,3 +13,5 @@ bash noipc/build.sh
 请阅读 [构建与同步上游说明](../noipc/README.md)。
 
 手机使用签名 APT 源安装，并通过官方 systemd 服务管理：[NetHunter arm64 APT 安装说明](../noipc/packaging/README.md)。
+
+[完整安装、同版本迁移与定时更新维护手册](../noipc/packaging/MAINTENANCE.zh-CN.md)。

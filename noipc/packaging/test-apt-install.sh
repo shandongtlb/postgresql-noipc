@@ -5,7 +5,7 @@ set -euo pipefail
 [[ ! -e /usr/sbin/policy-rc.d ]] || { echo 'Remove the build-only service policy from this disposable test root.' >&2; exit 1; }
 PG_APT_TEST_URI=${PG_APT_TEST_URI:?set the HTTP URL of the test archive}
 export DEBIAN_FRONTEND=noninteractive
-PG_APT_SOURCE=/etc/apt/sources.list.d/postgresql-noipc.sources
+PG_APT_SOURCE=/etc/apt/sources.list
 PG_TEST_RESULTS=/tmp/noipc-apt-test-results.txt
 : > "$PG_TEST_RESULTS"
 passed() { printf 'PASS: %s\n' "$1" | tee -a "$PG_TEST_RESULTS"; }
@@ -13,15 +13,16 @@ cleanup() { service postgresql stop >/dev/null 2>&1 || true; }
 trap cleanup EXIT
 curl -fL "$PG_APT_TEST_URI/postgresql-noipc-archive-keyring_all.deb" -o /tmp/postgresql-noipc-keyring.deb
 apt-get -y --no-install-recommends install /tmp/postgresql-noipc-keyring.deb ssl-cert
-sed -i "s|^URIs: .*|URIs: $PG_APT_TEST_URI/|" "$PG_APT_SOURCE"
+/usr/lib/postgresql-noipc/configure-source --url "$PG_APT_TEST_URI"
 apt-get update
 passed 'APT verifies the signed archive with a scoped Signed-By keyring'
 apt-cache policy postgresql-18
+postgresql-noipc-upgrade --no-update -y
 apt-get -y --no-install-recommends install postgresql postgresql-client postgresql-18-jit \
   postgresql-plperl-18 postgresql-plpython3-18 postgresql-pltcl-18
-[[ $(dpkg-query -W -f='${Version}' postgresql-18) == *+noipc* ]]
-[[ $(dpkg-query -W -f='${Version}' postgresql) == *+noipc* ]]
-[[ $(dpkg-query -W -f='${Version}' postgresql-client) == *+noipc* ]]
+[[ $(dpkg-query -W -f='${Postgresql-Noipc}' postgresql-18) == yes ]]
+[[ $(dpkg-query -W -f='${Postgresql-Noipc}' postgresql) == yes ]]
+[[ $(dpkg-query -W -f='${Postgresql-Noipc}' postgresql-client) == yes ]]
 grep -q '^Pin-Priority: -1$' /etc/apt/preferences.d/postgresql-noipc
 [[ -f /etc/init.d/postgresql ]]
 [[ -f /usr/lib/systemd/system/postgresql@.service || -f /lib/systemd/system/postgresql@.service ]]

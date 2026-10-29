@@ -11,6 +11,14 @@ parser = argparse.ArgumentParser()
 parser.add_argument('repository', type=Path)
 args = parser.parse_args()
 repository = args.repository.resolve()
+index = (repository / 'dists/stable/main/binary-arm64/Packages').read_text()
+def package_version(name):
+    for paragraph in index.strip().split('\n\n'):
+        fields = dict(line.split(': ',1) for line in paragraph.splitlines() if ': ' in line and not line.startswith(' '))
+        if fields.get('Package') == name: return fields['Version']
+    raise RuntimeError('Missing package: '+name)
+core_version = package_version('postgresql-18')
+meta_version = package_version('postgresql')
 passed = 0
 with tempfile.TemporaryDirectory(prefix='noipc-apt-policy-') as temp:
     root = Path(temp)
@@ -27,7 +35,8 @@ with tempfile.TemporaryDirectory(prefix='noipc-apt-policy-') as temp:
     fixtures = [
         ('postgresql', '99+999', 'postgresql-common', 'all'),
         ('postgresql-client', '99+999', 'postgresql-common', 'all'),
-        ('postgresql-18', '18.99-1', 'postgresql-18', 'arm64'),
+        ('postgresql-18', core_version, 'postgresql-18', 'arm64'),
+        ('postgresql-18', '18.9999-1', 'postgresql-18', 'arm64'),
         ('postgresql-99', '99.0-1', 'postgresql-99', 'arm64'),
         ('postgresql-9.6', '9.6.24-1', 'postgresql-9.6', 'arm64'),
         ('postgresql-client-99', '99.0-1', 'postgresql-99', 'arm64'),
@@ -83,11 +92,11 @@ APT::Architectures {{ "arm64"; "amd64"; }};
         passed += 1
         return policy
     for name in ('postgresql', 'postgresql-client'):
-        policy = verify(name, '18+noipc1')
+        policy = verify(name, meta_version)
         assert re.search(r'99\+999 -1\b', policy), policy
     for name in ('postgresql-18', 'libpq5'):
-        policy = verify(name, '18.6-3+noipc1')
-        assert '1001' in policy and re.search(r'(18\.99-1|99\.0-1) -1\b', policy), policy
+        policy = verify(name, core_version)
+        assert '1001' in policy and re.search(r'(18\.9999-1|99\.0-1) -1\b', policy), policy
     for name in ('postgresql-99', 'postgresql-9.6', 'postgresql-client-99', 'libpq5:amd64'):
         verify(name, '(none)')
         failure = apt('apt-get', '-s', 'install', name, check=False)
@@ -96,7 +105,11 @@ APT::Architectures {{ "arm64"; "amd64"; }};
         verify(name, '999')
     verify('postgresql-18-pgvector', '0.99-1')
     verify('postgresql-18-special', '1-1')
-    verify('postgresql-18', '18.6-3+noipc1', '-o', 'APT::Default-Release=kali-rolling')
+    verify('postgresql-18', core_version, '-o', 'APT::Default-Release=kali-rolling')
+    chosen = apt('apt-get', '--print-uris', 'download', 'postgresql-18').stdout
+    assert str(custom/'pool') in chosen, chosen
+    print('PASS: an identical official version downloads from the first NoIPC source')
+    passed += 1
     # Absence of the NoIPC archive must never select a stock core fallback.
     write_sources(include_noipc=False)
     apt('apt-get', '-o', 'APT::Update::Error-Mode=any', 'update')

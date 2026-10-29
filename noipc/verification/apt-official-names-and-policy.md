@@ -1,21 +1,14 @@
-# Official package names and stock-core exclusion
+# 官方包名、官方版本与默认保护
 
-Date: 2026-10-29. Core binaries remain 18.6-3+noipc1, byte-for-byte identical to the previous release.
-New metapackages: `postgresql` and `postgresql-client`, both version 18+noipc1.
-Archive configuration update: `postgresql-noipc-archive-keyring` 2026.10.29.2. Archive commit: `6312152`. Exact new package checksums are in `apt-policy-artifact-sha256.txt`.
+实际包名及版本采用 Kali 对应官方值；当前值见 `../packaging/manifest.json`。源配置辅助包独立编号，标准 `postgresql` / `postgresql-client` 元包依赖同一份 `postgresql-18` / `postgresql-client-18`，兼容别名不会额外安装服务端。
 
-The standard metapackages depend on the existing standard-named `postgresql-18` / `postgresql-client-18` packages and the new archive configuration. The old `postgresql-noipc` alias continues to refer to exactly those same binaries; it does not install another server or create another cluster.
+同版本的两份包可能在 APT 中合并为一个版本，因此优先级之外还必须保证首选下载来源及安装前校验：
 
-The shipped preferences assign priority 1001 to this archive's rebuilt packages and standard metapackages. A second record assigns -1 to other versions of PostgreSQL core source packages and the two standard metapackages. The core-source regular expression is bounded to numeric major/version names, so a separately packaged extension whose source is named `postgresql-18-special` is still allowed. `postgresql-common` / `postgresql-client-common` are separate source packages and continue to receive normal Kali updates.
+- 受管理 NoIPC 源在 `/etc/apt/sources.list` 首位；公钥使用 Signed-By 限定。
+- 其他版本的官方核心包优先级为 -1；NoIPC 版本优先级 1001。按源码包精确匹配核心，不误伤公共服务包和独立扩展。
+- 安装前钩子拒绝缺少 `Postgresql-Noipc: yes` 的核心 `.deb`，不依赖版本号猜测。
+- 包 URL 含内容哈希；同版本重新发布不复用旧 URL。普通 APT 升级用于官方版本变化，同版本重建使用 `postgresql-noipc-upgrade` 显式重装。
 
-This uses standard [APT preferences](https://manpages.debian.org/unstable/apt/apt_preferences.5.en.html). It controls default candidate selection. It does not remove existing other-major clusters or erase data, and it does not replace an administrator's ability to explicitly override APT policy. Future patched releases still require maintainer builds and publication.
+`apt-policy.log` 记录策略测试；`apt-install-guard.log` 记录标记校验；`apt-policy-upgrade.log` 记录从旧自定义版本迁移的实际结果。完整验收及平台限制见 `apt-verification.md` / `latest-update.json`。
 
-All 16 isolated policy checks, 5 ARM64 migration/final-policy checks and 2 public-archive checks passed.
-
-## Evidence
-
-- `apt-policy.log`: all 16 real-APT checks pass in an isolated state directory using the exact preferences extracted from the final bootstrap .deb and the actual NoIPC Packages index. Synthetic stock indices offer higher 18.x versions, a future major 99, legacy 9.6, amd64 libpq, newer common packages and independent extensions. They check normal selection, a Kali target-release preference, refusal of stock-only core installation, and no stock fallback when the NoIPC archive is absent. No synthetic package is installed. Reproduce with `python3 noipc/packaging/test-apt-policy.py noipc/repository`.
-- `apt-policy-upgrade.log`: actual ARM64 Kali APT upgrades the old 2026.10.29.1 bootstrap, installs the standard metapackages, retains exactly one installed server and one cluster, preserves the server's SHA256 and start timestamp, retains all 200,000 committed rows, and simulates a clean ordinary upgrade. A subsequent reinstall verifies the final bounded-source policy payload.
-- `apt-policy-public.log`: after publication, actual ARM64 Kali APT authenticates the public GitHub archive, resolves both standard names to the NoIPC metapackages, shows stock packages at -1 and common packages at 500, and downloads the public bootstrap/metapackages.
-
-The ARM64 package migration uses the same QEMU/native-systemd test setup and no-SysV seccomp filter described in `apt-verification.md`. Runtime core binaries and service units are unchanged, so the prior runtime integration results continue to apply. Physical-phone validation is still pending.
+默认保护不删除已有其他大版本或数据，不替代数据库跨大版本迁移。APT 分支只保留最新快照，源码分支保留官方历史。

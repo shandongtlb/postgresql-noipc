@@ -1,31 +1,26 @@
-# Kali NetHunter arm64 APT build verification
+# 当前 APT 发布验证
 
-This record describes the initial APT release (`3d45d5c`). Current standard metapackages and the stricter stock-core exclusion policy are covered in [the follow-up verification](apt-official-names-and-policy.md).
+当前版本、代码配方指纹、包哈希和最近的验证结果以 [latest-update.json](latest-update.json) 与 [发布状态](../packaging/published.json) 为准；这些文件在每次成功发布时覆盖更新。
 
-Target: current Kali rolling arm64 NetHunter chroot with systemd. Build date: 2026-10-29.
-Upstream: PostgreSQL 18.6; official Debian/Kali packaging: 18.6-3; rebuild: 18.6-3+noipc1.
+采用发行版的 PostgreSQL 18 包名和精确官方版本，不加 NoIPC/日期后缀。修改过的包带 `Postgresql-Noipc: yes` 字段。沿用官方 `postgresql-common` 路径、集群维护脚本、systemd 单元与运行功能。`nocheck nodoc` 跳过包构建内测试与独立文档包，运行验收由单独的 CI 步骤执行。
 
-The six functional source files in the Debian-prepared source were compared byte-for-byte with this Git checkout. The clean modified source package was produced before the binary build. The build used the official PostgreSQL packaging rules and full optional runtime features. The `nocheck nodoc` profiles skip build-time tests and the standalone documentation package; they do not disable runtime features. Integration tests were run separately.
+验收覆盖：
 
-Results: all 12 APT/package checks and all 4 systemd/IPC checks passed. The existing 200,000-row table survived package reinstall, remove/reinstall and a fresh systemd boot. Two further public-archive checks passed after publishing branch `apt` (initial archive commit `3d45d5c`): real APT signature/candidate resolution and authenticated server/metapackage/bootstrap downloads from raw.githubusercontent.com.
+- 14 个 ARM64 核心包、137 个 AArch64 ELF；全部具有 NoIPC 标记，直接导入中没有 12 类 SysV IPC 函数。详细依赖/GLIBC 需求见 `apt-deb-audit.json`。
+- 17 项真实 APT 隔离策略测试：同版本实际下载来源、不同版本及未来大版本拒绝、外架构、独立扩展、公共服务包、NoIPC 源缺失时不回退。
+- 7 项真实 `.deb` 安装前检查测试：拒绝未标记核心包，允许标记核心包及正常公共包/独立扩展。
+- 真实 dpkg 源码/二进制版本测试：官方源码版本不变，官方 `+bN` 二进制修订保留其原始 Source 版本。
+- 12 项 APT 安装验收：完整安装、官方目录与服务、TLS/SCRAM、并行查询、PL/JIT、多集群、重装/移除再安装保留数据与配置、认证源码下载。
+- 13 项已安装程序集成验收：SQL、并发、备份恢复、后端崩溃、PID 文件移除、孤儿后端继续持有目录锁、WAL 恢复、单用户访问、重复启停。
+- 4 项 systemd/IPC 验收：继承禁用 SysV 的过滤器、开机自动启动已有集群、实例启停/重启/重载、包维护脚本实际触发重启并保留数据。
+- 真实 Git 原子发布测试：源码历史保持向前，APT 快照仅一个提交，并发旧 lease 会拒绝两个分支的更新。
 
-Evidence:
+另使用原先 `+noipc` 包和旧源配置的隔离安装，验证迁移到官方 `18.6-3` / `18+293` 后仍为单一集群，保留 200,000 行及其求和结果，旧 Deb822 源被正确移除，新源顺序和安装前保护生效。
 
-- `apt-build-config.txt`: actual ARM64 `pg_config` output and feature flags.
-- `apt-deb-audit.json`: 14 ARM64 packages, 137 AArch64 ELF files, no imports of the 12 SysV shared-memory/semaphore/message-queue functions. Server dependency and highest required GLIBC version: 2.43.
-- `apt-artifact-sha256.txt`: exact binary/source/build metadata checksums.
-- `apt-install.log`: signed local HTTP APT installation and package integration results.
-- `apt-systemd.log`: boot, service lifecycle and real package maintscript restart results.
-- `apt-public-source.log`: public GitHub archive signature verification and package candidate.
+## 环境与边界
 
-The archive contains 14 rebuilt binary packages, an archive key/source configuration package, a PostgreSQL NoIPC metapackage, and the matching modified source package. Its InRelease/Release signatures use the scoped archive key with fingerprint `8404657F5B03D8A975D4572BD95D2C6AD8196DBD`.
+x86_64 构建机通过 QEMU 运行 Kali rolling ARM64 用户空间。整个验收容器继承 seccomp 过滤器，12 类 SysV IPC 系统调用返回 ENOSYS；ARM64 Python 会实际验证共享内存、信号量及消息队列调用失败。
 
-## Test environment and limits
+测试控制器采用宿主原生 systemd/执行器及其库的只读绑定，以避开 ARM64 systemd 在 QEMU 用户态仿真的重载问题。PostgreSQL、客户端、包维护脚本、集群工具及数据库模块均为 ARM64。六个基础设施单元清空 ImportCredential，设置 QEMU CPU 模型；PostgreSQL 单元不变。测试根目录移除构建专用 policy-rc.d 后，真实测试包维护脚本与服务。
 
-Tests use an isolated Kali rolling ARM64 userspace on an x86_64 Linux host, with ARM64 executables running under QEMU user emulation. A seccomp filter inherited by the entire container returns ENOSYS for all 12 SysV IPC syscalls. ARM64 Python checks that shared-memory, semaphore and message-queue syscalls really fail with ENOSYS.
-
-ARM64 systemd under QEMU started the initial database and passed TLS, parallel-query, PL language and JIT checks, but became unresponsive during a later daemon-reload. To complete service tests, the test container uses the host's native x86_64 systemd manager, executor and their libraries through read-only mounts. PostgreSQL, its clients, package scripts, cluster tools and all database modules remain ARM64. The distribution's PostgreSQL service units are unchanged. Six infrastructure service overrides clear ImportCredential for QEMU compatibility; none change PostgreSQL services.
-
-The disposable test root is copied from the build root. The build-only policy-rc.d initially suppressed maintscript starts during an early reinstall. It was removed before remove/reinstall and the separate systemd boot test; the latter additionally verifies a genuine maintscript-driven instance restart by comparing systemd InvocationID across reinstall. No such policy or emulation override is shipped in the packages.
-
-These are emulation and package/service integration results, not a claim of physical-phone or native ARM64 systemd validation. Installation in the user's actual NetHunter chroot remains to be checked there.
+这些是包、服务与故障恢复的隔离仿真结果；手机实机尚未验证。安装与定时任务操作见 [完整维护手册](../packaging/MAINTENANCE.zh-CN.md)。

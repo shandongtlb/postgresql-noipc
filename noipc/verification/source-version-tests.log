@@ -1,0 +1,2 @@
+PASS: the generated .dsc keeps the exact official source version
+PASS: binary-only +bN builds keep the official binary version and original Source version

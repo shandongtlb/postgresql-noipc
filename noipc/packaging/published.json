@@ -1,0 +1,33 @@
+{
+  "debian_version": "18.6-3",
+  "binary_version": "18.6-3",
+  "metapackage_version": "18+293",
+  "recipe_fingerprint": "d07de3daafc54ddf9420822d510f11893011aebc60b4e05f4e298a703c21b4a3",
+  "upstream_tag": "REL_18_6",
+  "published_at": "2026-10-29T10:16:47.904510+00:00",
+  "package_hashes": {
+    "pool/main/p/postgresql/a354c948821035b39dbe/postgresql_18+293_all.deb": "a354c948821035b39dbedee4465a7d61c42a6f92118f3a5666f3144facb0588b",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/libecpg-compat3_18.6-3_arm64.deb": "dba431af80d440f300b0d9167d0af9e28ad6c4347d1ab5f3001c6bdfcad1fdb1",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/libecpg-dev_18.6-3_arm64.deb": "aebf4be7e333a85a6d76078c073108a246b3a86fde24a10221db7a5d61676b98",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/libecpg6_18.6-3_arm64.deb": "972ccef6227a4032a080a38f4e391503fd3b9855b4db08b6992b2c435dbf20ac",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/libpgtypes3_18.6-3_arm64.deb": "9d65658cd464f9d758e81a72ffffbdd29df334d9f2c319c73519db95698af855",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/libpq-dev_18.6-3_arm64.deb": "252b77a8bbb1719f8316e03337805a888dbd3dbc83bdc0f87f09d69d07c10908",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/libpq-oauth_18.6-3_arm64.deb": "091dc493aa37c6b67c1d101debdadff0516d5356ad7fec1f3a2cff1bf7aff15a",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/libpq5_18.6-3_arm64.deb": "dd05e075957ee0c3ce8a9677f6b5f50b437aa71b5eae0d252a4e278b9a13a000",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-18-jit_18.6-3_arm64.deb": "60934d97d35b9dc93f659dca409bb60115e58978de7556b18b51a785678f703d",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-18_18.6-3.debian.tar.xz": "bb4c89dc8a482de4844b440950fd164d95da51b6fcbe0b54311de84569b08c2f",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-18_18.6-3.dsc": "e306002fb791c26937c4c24512756beb9818e4e155a6ef2d745be754c70be586",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-18_18.6-3_arm64.deb": "11dc9d530f15c95f97a1ed6f11c4dce8cb221f35577270774627feb88070bd7d",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-18_18.6.orig.tar.bz2": "555610c24d53e4316da5b7d3fc25c279d96856d5e0e23ee308c328c5fa881d9f",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-client-18_18.6-3_arm64.deb": "b1022e0de98e164f3d0c2339d5b0a2c0ea0c8e7e4a4085607e298a4f9d600ea1",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-plperl-18_18.6-3_arm64.deb": "590fc486fd6090a3bed3185306936e4d75a144949e24b810dbd1ed2d812ce432",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-plpython3-18_18.6-3_arm64.deb": "9bdcc7c7301887a8ff6de01f7756a5279028a70335544bb5ffa3bfb597dcc2c9",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-pltcl-18_18.6-3_arm64.deb": "602ecfc1de45c998f0b85b05e15f2b873845ea0b2b57373ff3667965bf72f5d6",
+    "pool/main/p/postgresql-18/19cc330e3519547f20ff/postgresql-server-dev-18_18.6-3_arm64.deb": "44a4638e5c3bd334049bcedc912279a4c571768d8ca9f56a208853714ee5a536",
+    "pool/main/p/postgresql-client/060041ded0fdd38fdf9a/postgresql-client_18+293_all.deb": "060041ded0fdd38fdf9aaf749a4432fe4c02f37d30f5fabc7a8ad71e8e85ffad",
+    "pool/main/p/postgresql-noipc/87c604c7b2d8c03a5cbe/postgresql-noipc_18.6-3_all.deb": "87c604c7b2d8c03a5cbe5a96c71f94ed6837997eba2f35c5a145e8edda72ff1a",
+    "pool/main/p/postgresql-noipc-archive-keyring/76034c656f7b66b8ef9c/postgresql-noipc-archive-keyring_2026.10.29.3_all.deb": "76034c656f7b66b8ef9c662d97baba13f966dcf05d47965a88b672a895469056"
+  },
+  "archive_keyring_version": "2026.10.29.3",
+  "archive_keyring_sha256": "76034c656f7b66b8ef9c662d97baba13f966dcf05d47965a88b672a895469056"
+}

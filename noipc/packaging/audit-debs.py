@@ -17,8 +17,9 @@ for deb in sorted(args.packages.glob('*.deb')):
     architecture = field('Architecture')
     assert architecture in ('arm64', 'all'), (deb, architecture)
     package = {'package': field('Package'), 'version': field('Version'),
-               'architecture': architecture, 'depends': field('Depends'), 'elf': []}
-    assert '+noipc' in package['version'], package
+               'architecture': architecture, 'noipc': field('PostgreSQL-NoIPC'),
+               'depends': field('Depends'), 'elf': []}
+    assert field('PostgreSQL-NoIPC') == 'yes', package
     with tempfile.TemporaryDirectory(prefix='noipc-deb-audit-') as temp:
         root = Path(temp)
         subprocess.run(['dpkg-deb', '-R', str(deb), str(root)], check=True)

@@ -12,6 +12,8 @@ import urllib.request
 
 base = Path(__file__).resolve().parents[1]
 manifest = json.loads((base / 'packaging/manifest.json').read_text())
+if manifest['noipc_version'] != manifest['debian_version']:
+    raise SystemExit('PostgreSQL versions must exactly match the official Debian/Kali version')
 parser = argparse.ArgumentParser()
 parser.add_argument('output', type=Path, help='parent directory for unpacked source and orig tarball')
 args = parser.parse_args()
@@ -23,7 +25,7 @@ functional_files = {
 # This recipe is pinned to a release. Refuse to silently omit later upstream
 # changes when a maintainer pulls new commits but has not updated packaging.
 changed = set(subprocess.check_output(
-    ['git', 'diff', '--name-only', 'REL_18_6', '--', '.',
+    ['git', 'diff', '--name-only', 'REL_' + manifest['upstream_version'].replace('.', '_'), '--', '.',
      ':(exclude)noipc/**', ':(exclude).github/README.md'],
     cwd=base.parent, text=True).splitlines())
 if changed - functional_files:
@@ -45,13 +47,19 @@ for name, expected in manifest['files'].items():
 source = out / f"postgresql-{manifest['upstream_version']}"
 if source.exists():
     raise SystemExit(f'Refusing to overwrite existing source: {source}')
-subprocess.run(['tar', '-xjf', str(out / f"postgresql-18_{manifest['upstream_version']}.orig.tar.bz2"),
+orig = next(name for name in manifest['files'] if '.orig.tar.' in name)
+debian_tar = next(name for name in manifest['files'] if '.debian.tar.' in name)
+subprocess.run(['tar', '-xf', str(out / orig),
                 '-C', str(out)], check=True)
-subprocess.run(['tar', '-xf', str(out / f"postgresql-18_{manifest['debian_version']}.debian.tar.xz"),
+subprocess.run(['tar', '-xf', str(out / debian_tar),
                 '-C', str(source)], check=True)
 debian = source / 'debian'
 patch = debian / 'patches/noipc-linux-mmap-directory-lock.patch'
-shutil.copy2(base / 'postgresql-18.6-no-sysvipc.patch', patch)
+patch.write_bytes(subprocess.check_output(
+    ['git', 'diff', '--binary', 'REL_' + manifest['upstream_version'].replace('.', '_'),
+     '--', *sorted(functional_files)], cwd=base.parent))
+if not patch.stat().st_size:
+    raise SystemExit('The NoIPC source delta is empty')
 with (debian / 'patches/series').open('a') as f:
     f.write('\nnoipc-linux-mmap-directory-lock.patch\n')
 subprocess.run(['dpkg-source', '--before-build', str(source)], check=True)
@@ -72,6 +80,9 @@ text = control.read_text().replace(
     'Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>',
     'Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>\n'
     'XSBC-Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>')
+text = text.replace('Source: postgresql-18\n', 'Source: postgresql-18\nXB-PostgreSQL-NoIPC: yes\n', 1)
+if 'XB-PostgreSQL-NoIPC: yes' not in text:
+    raise SystemExit('Could not add the NoIPC binary marker to Debian control')
 control.write_text(text)
 
 for name in functional_files:
@@ -81,4 +92,13 @@ for name in functional_files:
 # Create source artifacts while the tree is clean, before autoreconf/make add
 # generated files. This is also the normal Debian source-before-binary order.
 subprocess.run(['dpkg-source', '--build', source.name], cwd=out, check=True)
+binary_version = manifest.get('binary_version', manifest['debian_version'])
+if binary_version != manifest['debian_version']:
+    import re
+    if not re.fullmatch(re.escape(manifest['debian_version']) + r'\+b[0-9]+', binary_version):
+        raise SystemExit('Unsupported official binary-only revision')
+    binary_entry = (f"postgresql-18 ({binary_version}) kali-rolling; urgency=medium, binary-only=yes\n\n"
+                    '  * Match the official Kali arm64 binary-only rebuild revision.\n\n'
+                    f' -- SDTLB <40312509+shandongtlb@users.noreply.github.com>  {now}\n\n')
+    changelog.write_text(binary_entry + changelog.read_text())
 print(source)

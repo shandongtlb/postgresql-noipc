@@ -13,11 +13,11 @@
 curl -fLO https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt/postgresql-noipc-archive-keyring_all.deb
 apt install ./postgresql-noipc-archive-keyring_all.deb
 apt update
-apt install postgresql postgresql-client
+postgresql-noipc-upgrade -y
 systemctl enable --now postgresql
 ```
 
-[APT 安装、systemd 与打包说明](packaging/README.md)。该构建沿用 Debian/Kali 的完整功能和 `postgresql-common` 集群管理。
+[APT 安装、systemd 与打包说明](packaging/README.md) · [完整维护和定时更新手册](packaging/MAINTENANCE.zh-CN.md)。该构建沿用 Debian/Kali 的完整功能和 `postgresql-common` 集群管理。
 
 ## 原生构建
 

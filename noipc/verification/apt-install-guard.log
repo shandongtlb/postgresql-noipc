@@ -1,0 +1,8 @@
+PASS: postgresql-18, source=postgresql-18, marker=False: rejected
+PASS: postgresql-99, source=postgresql-99, marker=False: rejected
+PASS: postgresql, source=postgresql-common, marker=False: rejected
+PASS: libpq5, source=postgresql-18, marker=False: rejected
+PASS: postgresql-18, source=postgresql-18, marker=True: accepted
+PASS: postgresql-common, source=postgresql-common, marker=False: accepted
+PASS: postgresql-18-pgvector, source=postgresql-pgvector, marker=False: accepted
+All 7 real package guard checks passed; no fixture package was installed.

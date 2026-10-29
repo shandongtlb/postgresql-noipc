@@ -1,130 +1,55 @@
-# Kali arm64 的 APT 分发
+# Kali NetHunter arm64 APT 安装与维护
 
-目标是最新版 **Kali NetHunter arm64 chroot，且其中运行了 systemd**。此目录沿用 Debian/Kali 的 **postgresql-18 18.6-3** 官方打包规则，追加 NoIPC 补丁，生成版本 **18.6-3+noipc1**。
-安装目录、包名、维护脚本和集群服务均沿用发行版规范；服务管理由手机 Kali 自己的 `postgresql-common` 提供。
-这套包按当前 Kali rolling arm64 构建，包含 TLS、ICU、readline、压缩库、LLVM/JIT，以及 Python、Perl、Tcl 等官方功能。
-本次构建和验证环境为 Kali 2026.3 rolling；服务端声明依赖 `libc6 (>= 2.43)`，其他依赖由 APT 一并解析。
+完整说明见 **[安装、更新、构建与定时发布维护手册](MAINTENANCE.zh-CN.md)**。
+PG18 包名和版本号均与 Kali 对应官方包一致，精确版本见 [当前构建清单](manifest.json) 和 [发布状态](published.json)。源配置辅助包独立编号。
 
-## 手机安装
+## 手机完整安装命令
 
-在 **arm64 手机的 Kali chroot 内**以 root 执行：
+在运行 systemd 的 Kali NetHunter arm64 chroot 内以 root 执行：
 
 ```bash
 apt update
 apt install -y curl ca-certificates
-curl -fLO https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt/postgresql-noipc-archive-keyring_all.deb
-apt install ./postgresql-noipc-archive-keyring_all.deb
-apt update
-apt install postgresql postgresql-client
+curl -fL \
+  https://raw.githubusercontent.com/shandongtlb/postgresql-noipc/apt/postgresql-noipc-archive-keyring_all.deb \
+  -o /tmp/postgresql-noipc-archive-keyring_all.deb
+apt install -y /tmp/postgresql-noipc-archive-keyring_all.deb
+postgresql-noipc-upgrade -y
 systemctl enable --now postgresql
 systemctl status postgresql@18-main --no-pager
 pg_lsclusters
 runuser -u postgres -- psql
 ```
 
-日常直接使用官方名字 `postgresql`、`postgresql-client`，它们选择本源的 `postgresql-18` 和 `postgresql-client-18`。
-所有版本化核心包、库包也保留官方包名；同名包会替换原包，不会作为另一套并排安装。
-此前的 `postgresql-noipc` 仅保留为兼容别名，依赖同一份服务端和客户端。
-首次安装由官方维护脚本创建 `18/main` 集群。已有集群时沿用发行版的保留和升级规则。
-源配置包 **2026.10.29.2** 安装公钥、Deb822 APT 源以及 `/etc/apt/preferences.d/postgresql-noipc`：
+`postgresql-noipc-upgrade` 使用 APT，确保同版本官方包被重装为本源构建，并兼容此前 `+noipc` 版本的迁移；不会创建第二份服务端或删除已有数据。
+之后新官方版本用 `apt update && apt upgrade` 更新；官方版本未变、仅本构建变化时用 `postgresql-noipc-upgrade` 显式重装。
 
-- 本签名源的核心包及官方名字的元包优先级为 **1001**。
-- 其他源的 PostgreSQL 核心包及 `postgresql`/`postgresql-client` 元包优先级为 **-1**，默认禁止选择，覆盖未来官方大版本。
-- 按源码包匹配核心包，不会误伤 Kali 的 `postgresql-common`、`postgresql-client-common` 或 pgvector 等独立扩展。
-- NoIPC 源不可用时不回退到官方核心包。已有的其他大版本和数据不会被自动删除。
+包沿用发行版目录、维护脚本、`postgresql-common` 和 systemd 单元。包含 TLS、ICU、压缩库、LLVM/JIT、Python/Perl/Tcl 等完整运行功能。当前构建依赖 glibc >= 2.43。
 
-该行为使用标准 [APT preferences 规则](https://manpages.debian.org/unstable/apt/apt_preferences.5.en.html)。
-屏蔽规则随源配置包更新；NoIPC 核心包的新版本仍需由维护者合并上游、构建和发布。
+## 官方包的默认屏蔽
 
-如果此前已安装 2026.10.29.1 的源配置包，执行以下命令升级规则并使用官方安装入口：
+- NoIPC 签名源被放在 `/etc/apt/sources.list` 首位。
+- 偏好规则优先本源并拒绝其他版本的 PostgreSQL 核心包。
+- 安装前校验拒绝没有 `Postgresql-Noipc: yes` 标记的核心包，补足同版本 APT 选源的限制。
+- `postgresql-common`、客户端公共脚本及独立扩展正常从 Kali 更新。
 
-```bash
-apt update
-apt install postgresql-noipc-archive-keyring
-apt install postgresql postgresql-client
-```
+恢复源顺序：`/usr/lib/postgresql-noipc/configure-source`。详细原理及检查命令见完整手册。
 
-可用 `apt-cache policy postgresql postgresql-18 libpq5` 检查：本源为 1001，官方核心包为 -1。
-不要把此 APT 包与之前解压到 `/opt/pgsql-18-no-sysvipc` 的便携版同时作为同一集群运行。
+## 定时发布与保留策略
 
-官方路径和命令：
+构建机的 `postgresql-noipc-update.timer` 每天 03:30 UTC 起检查正式 PG18 / Kali 打包更新，随机延迟最多 15 分钟。构建、包审计、APT 和 systemd 检查通过后，才会签名并原子推送。
 
-| 项目 | 路径或命令 |
-| --- | --- |
-| 服务端程序 | `/usr/lib/postgresql/18/bin/` |
-| 配置 | `/etc/postgresql/18/main/` |
-| 数据 | `/var/lib/postgresql/18/main/` |
-| 日志 | `/var/log/postgresql/postgresql-18-main.log` |
-| socket/PID | `/run/postgresql/` |
-| 集群状态 | `pg_lsclusters` |
-| 启停某个集群 | `pg_ctlcluster 18 main start` / `stop` / `restart` |
-| 管理全部集群 | `service postgresql start` / `stop` / `restart` / `status` |
-| 创建与删除集群 | `pg_createcluster` / `pg_dropcluster` |
-
-## 守护与自启
-
-你已确认 NetHunter chroot 中运行了 systemd，直接使用官方 `postgresql.service` 和 `postgresql@18-main.service`：
+`main` 保留官方 PostgreSQL 源码历史。`apt` 是仅一个 Git 提交的最新软件源快照，旧包、旧源码包和旧索引直接清除。同版本包通过内容哈希目录区分下载地址，不另加版本后缀。
 
 ```bash
-systemctl enable --now postgresql
-systemctl restart postgresql@18-main
-systemctl status postgresql@18-main --no-pager
+systemctl list-timers postgresql-noipc-update.timer --no-pager
+journalctl -u postgresql-noipc-update.service -n 100 --no-pager
+cat /var/lib/postgresql-noipc-update/last-run.json
 ```
 
-`postgresql.service` 是管理全部集群的汇总服务，显示 `active (exited)` 属于正常行为；数据库实例状态看 `postgresql@18-main.service`。
-启用后每次该 chroot 的 systemd 启动时自动启动数据库；Android 何时启动 chroot 仍由 NetHunter 管理。
+手动检查：`python3 noipc/packaging/update.py --check`。
+同版本强制重建、测试并发布：`python3 noipc/packaging/update.py --rebuild`。
+定时任务运行在构建机，手机是否安装更新及何时重启数据库仍由手机使用者决定。
 
-对于其他未运行 systemd 的普通 chroot，官方 SysV 脚本仍可使用：
-
-```bash
-service postgresql start
-```
-
-只有这种没有 init 的 chroot 才需要在 Android 启动入口挂载并准备好根目录后调用，例如：
-
-```bash
-chroot /你的/Kali/根目录 /usr/sbin/service postgresql start
-```
-
-服务启动后 PostgreSQL 自己的 postmaster 在后台运行并管理后端进程。安装包不修改 Android 的开机脚本。
-如果残留的 systemd 状态导致重定向，可显式运行 `pg_ctlcluster --skip-systemctl-redirect 18 main start`。
-
-## 包与源码的构建
-
-在有 root 权限的 Linux 构建机安装工具（x86_64 主机通过 QEMU 执行 arm64）：
-
-```bash
-apt install mmdebstrap qemu-user binfmt-support build-essential dpkg-dev \
-  devscripts debhelper dh-exec apt-utils gpg curl bzip2 python3
-bash noipc/packaging/build-debs.sh
-```
-
-`build-debs.sh` 创建独立的 Kali arm64 根文件系统，校验 Kali 归档公钥，下载并校验官方发布包及 Debian 补丁，追加 NoIPC 补丁，再运行正式 `dpkg-buildpackage`。
-使用 `nocheck nodoc` 构建 profile 跳过打包过程中的测试和独立文档包，完整运行功能仍保留。安装包的集成测试单独执行。
-输出位于 `noipc/artifacts/debian-arm64/`，包括服务端、客户端、JIT、PL 包、开发包、库包及修改后的 `.dsc` 源码包。
-打包规则固定在 18.6-3；同步新上游版本后应先更新 `manifest.json`、对应补丁和构建脚本，避免发布错配的源码。
-
-## 创建与更新签名仓库
-
-```bash
-python3 noipc/packaging/audit-debs.py noipc/artifacts/debian-arm64 > noipc/logs/packaging/deb-audit.json
-python3 noipc/packaging/create-apt-repository.py --packages noipc/artifacts/debian-arm64
-```
-
-公钥指纹：`8404657F5B03D8A975D4572BD95D2C6AD8196DBD`。
-公钥见 `postgresql-noipc-archive-keyring.asc`。仓库包含签名的 InRelease/Release、按内容哈希寻址的索引及 deb-src 源码包。
-仓库输出位于 `noipc/repository/`，通过同一 GitHub 仓库的独立 `apt` 分支发布；无需启用 GitHub Pages。
-私钥留在本机被 Git 忽略的 `noipc/keys-private/apt/`，后续更新需要继续使用并备份该目录。私钥不进入仓库或安装包。
-重新发布同一包名与版本时必须保持内容一致；有源码或依赖构建变化时应递增 `+noipc` 修订号。
-官方名字元包的版本由 `--metapackage-version` 指定（当前 `18+noipc1`）；其依赖改变时也必须递增。
-
-## 验证
-
-`audit-debs.py` 检查真实 `.deb` 中的架构、依赖、官方集群维护脚本以及 ELF 的 SysV IPC 导入和 glibc 需求。
-`test-apt-install.sh` 只在带构建标记的隔离 Kali 环境中运行，验证签名 APT 安装、官方服务、目录、TLS、并行查询、PL 语言、JIT、多集群、配置/数据保留与源码下载。
-由宿主的 `deny-sysvipc` 启动整个测试，模拟未启用 CONFIG_SYSVIPC 的手机内核。
-`test-apt-policy.py noipc/repository` 使用真实 APT 和隔离的模拟上游索引，检查更高小版本、未来大版本、跨架构包、源不可用时的选择，以及公共服务包和独立扩展不受影响。
-`test-systemd.sh` 进一步验证随 systemd 启动、启停/重载以及真正由包维护脚本触发的服务重启。
-测试根目录须先移除仅用于构建的 `/usr/sbin/policy-rc.d`；它不进入发布包。
-官方包名及屏蔽策略的新增验证见 [包名与策略验证](../verification/apt-official-names-and-policy.md)。
-原运行功能验证及 QEMU/systemd 测试环境限制见 [APT 验证报告](../verification/apt-verification.md)。手机实机验证仍需要在你的 chroot 内进行。
+签名公钥指纹：`8404657F5B03D8A975D4572BD95D2C6AD8196DBD`。
+私钥留在本机 `noipc/keys-private/apt/`，不进入仓库或包。完整手册包含新构建机迁移、密钥备份、异常处理和验证边界。
