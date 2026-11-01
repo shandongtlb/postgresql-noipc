@@ -2,6 +2,8 @@
 
 基于 PostgreSQL 18 官方 Git 历史的修改分支，用于未启用 `CONFIG_SYSVIPC` 的 arm64 手机 Kali chroot。
 
+AI 或新维护者接手时先读 [AGENTS.md](../AGENTS.md)，再按需查阅完整维护手册。
+
 源码保持上游标准目录结构，已保留 `REL_18_6` 的完整历史；辅助脚本及验证记录位于 [`noipc/`](../noipc/)。
 
 ```bash

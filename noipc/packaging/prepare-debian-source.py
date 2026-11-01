@@ -28,9 +28,10 @@ functional_files = {
 }
 # This recipe is pinned to a release. Refuse to silently omit later upstream
 # changes when a maintainer pulls new commits but has not updated packaging.
+# Project maintenance documentation is outside the upstream source recipe.
 changed = set(subprocess.check_output(
     ['git', 'diff', '--name-only', 'REL_' + manifest['upstream_version'].replace('.', '_'), '--', '.',
-     ':(exclude)noipc/**', ':(exclude).github/README.md'],
+     ':(exclude)noipc/**', ':(exclude).github/README.md', ':(exclude)AGENTS.md'],
     cwd=base.parent, text=True).splitlines())
 if changed - functional_files:
     raise SystemExit('Update the pinned Debian packaging recipe for these source changes: '

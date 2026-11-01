@@ -1,5 +1,8 @@
 # 安装、日常更新与自动发布维护手册
 
+后续 AI 或新维护者请先读仓库根目录的 [AGENTS.md](../../AGENTS.md)，其中列出了
+目录用途、接手检查、发布约束和 APT 元数据位置；本文提供完整操作步骤。
+
 适用范围：运行 systemd 的 Kali NetHunter **arm64 chroot**，内核没有 CONFIG_SYSVIPC。当前构建采用 Kali rolling 的完整运行功能，glibc 至少 2.43。PostgreSQL 本身的版本跟随官方（当前 18.6），包名、路径和服务沿用发行版规范；Debian 包修订号使用 `+noipcN`，让标准 APT 能识别每次重编译。包另带 `Postgresql-Noipc: yes` 标记。
 
 ## 手机添加软件源与首次安装

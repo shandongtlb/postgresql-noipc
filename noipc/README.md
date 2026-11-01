@@ -5,6 +5,8 @@
 源码位于仓库根目录的标准 PostgreSQL 路径，保留官方 `REL_18_6` 及其全部祖先提交，便于继续合并 `REL_18_STABLE`。构建脚本、补丁和历史验证记录放在 `noipc/`。
 先前两个发布源码快照提交仍通过合并保存在历史中。
 
+AI 或新维护者接手时先读 [AGENTS.md](../AGENTS.md)，其中说明本机目录、自动发布入口及维护约束。
+
 ## 手机通过 APT 安装
 
 最新版 Kali NetHunter arm64 chroot（运行 systemd）可使用签名 APT 源和发行版服务管理：
@@ -48,15 +50,15 @@ git remote add upstream https://git.postgresql.org/git/postgresql.git
 git config remote.upstream.fetch '+refs/heads/REL_18_STABLE:refs/remotes/upstream/REL_18_STABLE'
 ```
 
-以后同步 PostgreSQL 18 稳定分支：
+以后获取 PostgreSQL 18 稳定分支的更新：
 
 ```bash
-git switch main
 git fetch upstream
-git merge upstream/REL_18_STABLE
-git push origin main
 ```
 
+正式 APT 发布统一使用 [自动更新流程](packaging/MAINTENANCE.zh-CN.md)：程序读取 Kali
+提供的正式源码版本，在独立 worktree 合并对应的 `REL_18_*` 发布标签，通过完整构建和测试后
+提交推送。不要直接合并尚未发布的 `upstream/REL_18_STABLE` HEAD 到用于正式打包的 `main`。
 合并若出现冲突，需要保留本项目的 mmap 与目录锁实现，解决后重新构建和测试。
 `REL_18_STABLE` 用于 18 系列维护更新；跨大版本迁移需要单独适配，不能直接以 `master` 替代它。
 可用 `git log -- src/backend/port/sysv_shmem.c` 查看包含上游的文件历史。
