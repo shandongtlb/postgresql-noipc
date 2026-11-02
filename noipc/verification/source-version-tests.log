@@ -1,3 +1,28 @@
+dpkg-source: info: using patch list from debian/patches/series
+dpkg-source: info: applying 50-per-version-dirs.patch
+dpkg-source: info: applying 51-default-sockets-in-var.patch
+dpkg-source: info: applying 52-tutorial-README.patch
+dpkg-source: info: applying 53-pg_service.conf_directory_doc.patch
+dpkg-source: info: applying 54-debian-alternatives-for-external-tools.patch
+dpkg-source: info: applying 70-history
+dpkg-source: info: applying filter-debug-prefix-map
+dpkg-source: info: applying libpgport-pkglibdir
+dpkg-source: info: applying autoconf2.69
+dpkg-source: info: applying pgstat-report-conflicts-immediately.patch
+dpkg-source: info: applying libpq.pc-no-libcurl
+dpkg-source: info: applying hurd-postmaster-socket-send
+dpkg-source: info: applying v2-0001-psql-count-every-COPY-FROM-STDIN-when-scanning-a-.patch
+dpkg-source: info: applying noipc-linux-mmap-directory-lock.patch
+dpkg-source: info: using source format '3.0 (quilt)'
+dpkg-source: info: building postgresql-18 using existing ./postgresql-18_18.6.orig.tar.bz2
+dpkg-source: info: using patch list from debian/patches/series
+dpkg-source: info: building postgresql-18 in ./postgresql-18_18.6-3+noipc3.debian.tar.xz
+dpkg-source: info: building postgresql-18 in ./postgresql-18_18.6-3+noipc3.dsc
+/tmp/noipc-source-version-62sa720h/source/postgresql-18.6
+dpkg-gencontrol: warning: Depends field of package postgresql-18: substitution variable ${misc:Depends} used, but is not defined
+dpkg-gencontrol: warning: Depends field of package postgresql-18: substitution variable ${shlibs:Depends} used, but is not defined
+dpkg-gencontrol: warning: package postgresql-18: substitution variable ${cassert} used, but is not defined
+dpkg-gencontrol: warning: package postgresql-18: substitution variable ${postgresql:Catversion} used, but is not defined
 PASS: the generated .dsc uses the local +noipcN source revision
 PASS: official binary-only +bN is retained after the local revision and references its correct Source version
 PASS: real dpkg-gencontrol emits the build-specific archive dependency

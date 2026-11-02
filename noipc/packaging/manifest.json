@@ -2,12 +2,12 @@
   "source": "postgresql-18",
   "upstream_version": "18.6",
   "debian_version": "18.6-3",
-  "noipc_version": "18.6-3+noipc2",
+  "noipc_version": "18.6-3+noipc3",
   "architecture": "arm64",
   "suite": "kali-rolling",
   "mirror": "https://http.kali.org/kali",
   "kali_archive_fingerprint": "827C8569F2518CC677FECA1AED65462EC8D5E4C5",
-  "source_base_url": "https://deb.debian.org/debian/pool/main/p/postgresql-18/",
+  "source_base_url": "https://http.kali.org/kali/pool/main/p/postgresql-18/",
   "files": {
     "postgresql-18_18.6.orig.tar.bz2": "555610c24d53e4316da5b7d3fc25c279d96856d5e0e23ee308c328c5fa881d9f",
     "postgresql-18_18.6-3.debian.tar.xz": "5efd00aa59930757931d13e3b2a343b5ac983fdf646a54a3b96caa30cb40512b"
@@ -16,6 +16,6 @@
   "metapackage_version": "18+293",
   "binary_version": "18.6-3",
   "official_binary_sha256": "69d175531f11cf4a38edfc45ac99513af2ebb3f37e9ee33253382c4f4dcbb838",
-  "archive_keyring_version": "2026.10.29.122732",
-  "noipc_revision": 2
+  "archive_keyring_version": "2026.11.02.033721",
+  "noipc_revision": 3
 }
