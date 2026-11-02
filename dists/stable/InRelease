@@ -1,0 +1,40 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Origin: PostgreSQL-NoIPC
+Label: PostgreSQL NoIPC
+Suite: stable
+Codename: noipc
+Date: Mon, 02 Nov 2026 04:37:58 +0000
+Architectures: arm64
+Components: main
+Acquire-By-Hash: yes
+Description: PostgreSQL 18 NoIPC rebuilds for Kali arm64
+MD5Sum:
+ 054c3457efca837306795168c2d0f384            23270 main/binary-arm64/Packages
+ 79d62f65ade3d803dc00b5f419c050dd             6689 main/binary-arm64/Packages.gz
+ 098592555a75d610730dea9b5921df79             6256 main/binary-arm64/Packages.xz
+ d08a80215597a2411840bb63011a6373             4819 main/source/Sources
+ 2e02b881375596747a36de3e387ba30a             1787 main/source/Sources.gz
+ 0ab12b24d3543a3e88a6c34ea88edcb5             1784 main/source/Sources.xz
+SHA256:
+ 6b805d8fe797e4f95f4f07c8369555309f9fc4e61e8886aad7604752f03be29c            23270 main/binary-arm64/Packages
+ 0cb8a25f5b4133626473fa2bdd748c5a1a0ac204623451596f1efb3c606643f2             6689 main/binary-arm64/Packages.gz
+ 5432d7e62667eae6e8b4131abc9f62244832a2f456feeb2356ab87f336b1b7ad             6256 main/binary-arm64/Packages.xz
+ a2585c9c7d8fcfa4633723b4394103abfeb470bb84668eeca97d07ae88cd10f7             4819 main/source/Sources
+ 4311b7954fd56b7b271379ed0dba2fac4a3e1cee8278c1f54d9d385eb05e1925             1787 main/source/Sources.gz
+ ff98fc5995aab6a49e44f389f496b9fae7cd96ba74f510600fbc4a9588f75964             1784 main/source/Sources.xz
+SHA512:
+ 0c051a9a8a53674a244f4048a554f92dc8381b6f57475d8f04160e5ec8cc7d53d29dcb1a92f00e5f76c0b47a1c15af6e8746ffce99f83491e58ac22238a3897b            23270 main/binary-arm64/Packages
+ ba664eea2b17675dd78a59d26daa2c3b583e61e743f2938951fa9cc14328ba37db968765afd4c6bf5d77e6f2a83159580f1d5be8a086208ccf663f344a710666             6689 main/binary-arm64/Packages.gz
+ f9cf02473463ff45baa5119e622ef23b936ff2f304c4efa28479857303a3c02f043897d912e2340c9477b47fc7fe8feb1c0f4e7887d076ef0dfe3e0ffb69fa92             6256 main/binary-arm64/Packages.xz
+ 0e4040f47bdfa1ce2386025a62d9f658f045cef9e5fa144eb8a96e7174e563d1ad68a064df4cbba54200e469aedd5b17e83b6638427071d92630a68079457b2c             4819 main/source/Sources
+ c0ff1e9f625aa5d0e87af2392aaeb086a0690d38d2204403278c0f82b3df14fa7c808d1410bf215df639ce579571de5d97f722f2c1f11a7e33aa14804bc7100b             1787 main/source/Sources.gz
+ 05704d621334697394e47bf192d9f066df39d2bcdd5536160529e107f465c9427bfa8ba1542f989984f958186f2eba5a3ba3f2cdb1dcb7b6ac71bf2e518e10f5             1784 main/source/Sources.xz
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQSEBGV/WwPYqXXUVyvZXSxq2BltvQUCaugTpgAKCRDZXSxq2Blt
+vZanAQCQTFArlJCoEKfRDx2l+F9FRnjSDSYxXV/NoUgvU8zPVwD9HbnxP136rYSf
+bInseHBUMOejgI+GUiGbdD/4e3Jqhw8=
+=gmuk
+-----END PGP SIGNATURE-----
