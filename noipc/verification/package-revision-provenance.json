@@ -1,6 +1,6 @@
 {
   "kind": "full source build in Kali ARM64",
-  "source_version": "18.6-3+noipc3",
-  "binary_version": "18.6-3+noipc3",
+  "source_version": "18.6-3+noipc4",
+  "binary_version": "18.6-3+noipc4",
   "upstream_tag": "REL_18_6"
 }

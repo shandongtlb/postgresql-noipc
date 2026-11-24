@@ -16,9 +16,9 @@ dpkg-source: info: applying noipc-linux-mmap-directory-lock.patch
 dpkg-source: info: using source format '3.0 (quilt)'
 dpkg-source: info: building postgresql-18 using existing ./postgresql-18_18.6.orig.tar.bz2
 dpkg-source: info: using patch list from debian/patches/series
-dpkg-source: info: building postgresql-18 in ./postgresql-18_18.6-3+noipc3.debian.tar.xz
-dpkg-source: info: building postgresql-18 in ./postgresql-18_18.6-3+noipc3.dsc
-/tmp/noipc-source-version-62sa720h/source/postgresql-18.6
+dpkg-source: info: building postgresql-18 in ./postgresql-18_18.6-3+noipc4.debian.tar.xz
+dpkg-source: info: building postgresql-18 in ./postgresql-18_18.6-3+noipc4.dsc
+/tmp/noipc-source-version-4ezscgm8/source/postgresql-18.6
 dpkg-gencontrol: warning: Depends field of package postgresql-18: substitution variable ${misc:Depends} used, but is not defined
 dpkg-gencontrol: warning: Depends field of package postgresql-18: substitution variable ${shlibs:Depends} used, but is not defined
 dpkg-gencontrol: warning: package postgresql-18: substitution variable ${cassert} used, but is not defined
