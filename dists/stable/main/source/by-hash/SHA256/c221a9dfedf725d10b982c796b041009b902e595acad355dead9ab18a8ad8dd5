@@ -1,0 +1,49 @@
+Package: postgresql-18
+Format: 3.0 (quilt)
+Binary: libpq-dev, libpq5, libpq-oauth, libecpg6, libecpg-dev, libecpg-compat3, libpgtypes3, postgresql-18, postgresql-client-18, postgresql-server-dev-18, postgresql-doc-18, postgresql-plperl-18, postgresql-plpython3-18, postgresql-pltcl-18, postgresql-18-jit
+Architecture: any all
+Version: 18.6-3+noipc4
+Maintainer: SDTLB <40312509+shandongtlb@users.noreply.github.com>
+Original-Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
+Uploaders: Martin Pitt <mpitt@debian.org>, Peter Eisentraut <petere@debian.org>, Christoph Berg <myon@debian.org>
+Standards-Version: 4.7.4
+Build-Depends: autoconf, bison, clang [amd64 arm64 mips64el ppc64 ppc64el s390x] <!pkg.postgresql.nollvm>, debhelper-compat (= 13), dh-exec (>= 0.13~), docbook-xml, docbook-xsl (>= 1.77), dpkg-dev (>= 1.16.1~), flex, gdb <!nocheck>, gettext, libcurl4-openssl-dev [linux-any], libicu-dev, libio-pty-perl <!nocheck>, libipc-run-perl <!nocheck>, libkrb5-dev, libldap2-dev, liblz4-dev, libnuma-dev [linux-any], libpam0g-dev | libpam-dev, libperl-dev, libreadline-dev, libselinux1-dev [linux-any], libssl-dev, libsystemd-dev [linux-any], liburing-dev [linux-any], libxml2-dev, libxml2-utils, libxslt1-dev, libzstd-dev (>= 1.4.0) <!pkg.postgresql.nozstd>, llvm-dev [amd64 arm64 mips64el ppc64 ppc64el s390x] <!pkg.postgresql.nollvm>, lz4 | liblz4-tool, mawk, openssl, perl (>= 5.8), pkgconf, postgresql-common-dev, python3-dev, systemtap-sdt-dev [linux-any], tcl-dev, tzdata <!nocheck>, tzdata-legacy <!nocheck> | tzdata (<< 2023c-8) <!nocheck>, uuid-dev, xsltproc, zlib1g-dev | libz-dev, zstd (>= 1.4.0) <!pkg.postgresql.nozstd>
+Testsuite: autopkgtest
+Testsuite-Triggers: build-essential, debhelper, fakeroot, hunspell-en-us, iproute2, locales-all, logrotate, netcat-openbsd, perl, postgresql-common-dev, procps, tzdata, tzdata-legacy
+Homepage: http://www.postgresql.org/
+Vcs-Browser: https://salsa.debian.org/postgresql/postgresql
+Vcs-Git: https://salsa.debian.org/postgresql/postgresql.git -b 18
+Directory: pool/main/p/postgresql-18/afaef65a44c280aea4ce
+Package-List:
+ libecpg-compat3 deb libs optional arch=any profile=!pkg.postgresql.nolibpkgs profile:v1=!pkg.postgresql.nolibpkgs
+ libecpg-dev deb libdevel optional arch=any profile=!pkg.postgresql.nolibpkgs profile:v1=!pkg.postgresql.nolibpkgs
+ libecpg6 deb libs optional arch=any profile=!pkg.postgresql.nolibpkgs profile:v1=!pkg.postgresql.nolibpkgs
+ libpgtypes3 deb libs optional arch=any profile=!pkg.postgresql.nolibpkgs profile:v1=!pkg.postgresql.nolibpkgs
+ libpq-dev deb libdevel optional arch=any profile=!pkg.postgresql.nolibpkgs profile:v1=!pkg.postgresql.nolibpkgs
+ libpq-oauth deb libs optional arch=linux-any profile=!pkg.postgresql.nolibpkgs profile:v1=!pkg.postgresql.nolibpkgs
+ libpq5 deb libs optional arch=any profile=!pkg.postgresql.nolibpkgs profile:v1=!pkg.postgresql.nolibpkgs
+ postgresql-18 deb database optional arch=any
+ postgresql-18-jit deb database optional arch=amd64,arm64,mips64el,ppc64,ppc64el,s390x profile=!pkg.postgresql.nollvm profile:v1=!pkg.postgresql.nollvm
+ postgresql-client-18 deb database optional arch=any
+ postgresql-doc-18 deb doc optional arch=all profile=!nodoc profile:v1=!nodoc
+ postgresql-plperl-18 deb database optional arch=any
+ postgresql-plpython3-18 deb database optional arch=any
+ postgresql-pltcl-18 deb database optional arch=any
+ postgresql-server-dev-18 deb libdevel optional arch=any
+Files:
+ a72536b18d6e9f4d740cdb3c899a7de3 3972 postgresql-18_18.6-3+noipc4.dsc
+ 6143c18ab91bdfcaa056a61861814cde 22632314 postgresql-18_18.6.orig.tar.bz2
+ 84611e0a64ecb4e1bff4824f075a6ad7 44468 postgresql-18_18.6-3+noipc4.debian.tar.xz
+Checksums-Sha1:
+ 0d971419fd53713367e4f9201a0dfa99a418c489 3972 postgresql-18_18.6-3+noipc4.dsc
+ a0b624ab95fd6fae676bc929d0e6fbcbc777c327 22632314 postgresql-18_18.6.orig.tar.bz2
+ 5ca5c011f4fb65b45c5ce018ecf05663f0a903c1 44468 postgresql-18_18.6-3+noipc4.debian.tar.xz
+Checksums-Sha256:
+ 5bb670d17b25adda739900b63289b1dabbb12cc2cb1e6215dd8ec3e7157c6ee9 3972 postgresql-18_18.6-3+noipc4.dsc
+ 555610c24d53e4316da5b7d3fc25c279d96856d5e0e23ee308c328c5fa881d9f 22632314 postgresql-18_18.6.orig.tar.bz2
+ 2568c408181b7484f65d4c5298d2dceada607eda2ac904656171e9bc36982036 44468 postgresql-18_18.6-3+noipc4.debian.tar.xz
+Checksums-Sha512:
+ e449e18f1713b17e0e8d136d090ecccb4e0a88ff6cafb94eef5efb6c3c82e5f84ad8fb8e7b62b782ab3c1ed251e27bf43f7926a9f85a7b4e1a93729c43e75110 3972 postgresql-18_18.6-3+noipc4.dsc
+ 5855d11be61a594e4dcdfa4ab4de1432caa86a8d50e1b1334ea2989439b46139612c53d00ba6330cba4d7d8b78a9e2176e1a2b6c5454814b5fa49dd54de72eb1 22632314 postgresql-18_18.6.orig.tar.bz2
+ ad27bc15545a5d41bc8a0616728b2db056d9ae6b2d4ba82f45cff9c45b555c9aa518c46d672919f5debb6fc86cc3136ab7867a1c8e52adc02b079466accdb646 44468 postgresql-18_18.6-3+noipc4.debian.tar.xz
+
